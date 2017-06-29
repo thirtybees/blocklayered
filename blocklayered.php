@@ -1358,6 +1358,10 @@ class BlockLayered extends Module
 
     public function hookAttributeGroupForm($params)
     {
+        if (!isset($params['id_attribute_group']) || !$params['id_attribute_group']) {
+            return '';
+        }
+
         $values = [];
         $is_indexable = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue(
             'SELECT `indexable`
@@ -1475,6 +1479,10 @@ class BlockLayered extends Module
 
     public function hookAttributeForm($params)
     {
+        if (!isset($params['id_attribute']) || !$params['id_attribute']) {
+            return '';
+        }
+
         $values = [];
 
         if ($result = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS(
@@ -1581,6 +1589,10 @@ class BlockLayered extends Module
 
     public function hookFeatureForm($params)
     {
+        if (!isset($params['id_feature']) || !$params['id_feature']) {
+            return '';
+        }
+
         $values = [];
         $is_indexable = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue(
             'SELECT `indexable`
