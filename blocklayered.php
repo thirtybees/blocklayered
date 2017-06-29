@@ -1322,7 +1322,7 @@ class BlockLayered extends Module
 
     public function hookAfterDeleteAttributeGroup($params)
     {
-        if (!$params['id_attribute_group']) {
+        if (!isset($params['id_attribute_group']) || !$params['id_attribute_group']) {
             return;
         }
 
@@ -1401,7 +1401,7 @@ class BlockLayered extends Module
 
     public function hookAfterSaveAttribute($params)
     {
-        if (!$params['id_attribute']) {
+        if (!isset($params['id_attribute']) || !$params['id_attribute']) {
             return;
         }
 
@@ -1435,7 +1435,7 @@ class BlockLayered extends Module
 
     public function hookAfterDeleteAttribute($params)
     {
-        if (!$params['id_attribute']) {
+        if (!isset($params['id_attribute']) || !$params['id_attribute']) {
             return;
         }
 
@@ -1683,6 +1683,10 @@ class BlockLayered extends Module
 
     public function hookFeatureValueForm($params)
     {
+        if (!isset($params['id_feature_value'])) {
+            return '';
+        }
+
         $values = [];
 
         if ($result = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS(
