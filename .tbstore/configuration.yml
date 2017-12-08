@@ -1,0 +1,13 @@
+module_name: Block Layered
+compatible_versions: 1.0.0+
+author: thirty bees
+category: front office
+tags:
+  - layered navigation
+  - filtering
+  - search
+description_short: The block layered is also known as the layered navigation module and is used for filtering and searching.
+description: description.md
+images:
+  - image-1.png
+license: AFL
