@@ -1,27 +1,26 @@
-/*
-* 2007-2016 PrestaShop
-*
-* NOTICE OF LICENSE
-*
-* This source file is subject to the Academic Free License (AFL 3.0)
-* that is bundled with this package in the file LICENSE.txt.
-* It is also available through the world-wide-web at this URL:
-* http://opensource.org/licenses/afl-3.0.php
-* If you did not receive a copy of the license and are unable to
-* obtain it through the world-wide-web, please send an email
-* to license@prestashop.com so we can send you a copy immediately.
-*
-* DISCLAIMER
-*
-* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
-* versions in the future. If you wish to customize PrestaShop for your
-* needs please refer to http://www.prestashop.com for more information.
-*
-*  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2016 PrestaShop SA
-*  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
-*  International Registred Trademark & Property of PrestaShop SA
-*/
+/**
+ * Copyright (C) 2017-2018 thirty bees
+ * Copyright (C) 2007-2016 PrestaShop SA
+ *
+ * thirty bees is an extension to the PrestaShop software by PrestaShop SA.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@thirtybees.com so we can send you a copy immediately.
+ *
+ * @author    thirty bees <modules@thirtybees.com>
+ * @author    PrestaShop SA <contact@prestashop.com>
+ * @copyright 2017-2018 thirty bees
+ * @copyright 2007-2016 PrestaShop SA
+ * @license   Academic Free License (AFL 3.0)
+ * PrestaShop is an internationally registered trademark of PrestaShop SA.
+ */
 
 var ajaxQueries = new Array();
 var ajaxLoaderOn = 0;
@@ -32,7 +31,7 @@ $(document).ready(function()
 {
 	cancelFilter();
 	openCloseFilter();
-	
+
 	// Click on color
 	$('#layered_form input[type=button], #layered_form label.layered_color').live('click', function()
 	{
@@ -42,7 +41,7 @@ $(document).ready(function()
 			$('input[name='+$(this).attr('name')+'][type=hidden]').remove();
 		reloadContent();
 	});
-	
+
 	// Click on checkbox
 	$('#layered_form input[type=checkbox], #layered_form input[type=radio]').live('click', function()
 	{
@@ -53,7 +52,7 @@ $(document).ready(function()
 	{
 		reloadContent();
 	});
-	
+
 	// Changing content of an input text
 	$('#layered_form input.layered_input_range').live('keyup', function()
 	{
@@ -62,23 +61,23 @@ $(document).ready(function()
 
 		// IE Hack, setTimeout do not acept the third parameter
 		var reference = this;
-		
+
 		$(this).attr('timeout_id', window.setTimeout(function(it) {
 			if (!$(it).attr('id'))
 				it = reference;
-			
+
 			var filter = $(it).attr('id').replace(/^layered_(.+)_range_.*$/, '$1');
-			
-			var value_min = parseInt($('#layered_'+filter+'_range_min').val()); 
-			if (isNaN(value_min)) 
+
+			var value_min = parseInt($('#layered_'+filter+'_range_min').val());
+			if (isNaN(value_min))
 				value_min = 0;
 			$('#layered_'+filter+'_range_min').val(value_min);
 
 			var value_max = parseInt($('#layered_'+filter+'_range_max').val());
-			if (isNaN(value_max)) 
+			if (isNaN(value_max))
 				value_max = 0;
 			$('#layered_'+filter+'_range_max').val(value_max);
-			
+
 			if (value_max < value_min) {
 				$('#layered_'+filter+'_range_max').val($(it).val());
 				$('#layered_'+filter+'_range_min').val($(it).val());
@@ -96,7 +95,7 @@ $(document).ready(function()
 		});
 		return true;
 	});
-	
+
 	// Click on label
 	$('#layered_block_left label a').live({
 		click: function() {
@@ -111,7 +110,7 @@ $(document).ready(function()
 			return false;
 		}
 	});
-	
+
 	layered_hidden_list = {};
 	$('.hide-action').live('click', function() {
 		if (typeof(layered_hidden_list[$(this).parent().find('ul').attr('id')]) == 'undefined' || layered_hidden_list[$(this).parent().find('ul').attr('id')] == false)
@@ -149,17 +148,17 @@ $(document).ready(function()
 		$('label[for=selectProductSort]').attr('for', 'selectProductSort'+id);
 		id++;
 	}
-	
+
 	// Since 1.5, event is add to .selectProductSort and not to #selectProductSort
 	setTimeout(function() {
 		$('.selectProductSort').unbind('change');
 	}, 100);
-	
+
 	$('.selectProductSort').live('change', function(event) {
 		$('.selectProductSort').val($(this).val());
 		reloadContent();
 	});
-	
+
 	// To be sure there is no other events attached to the nb_item, change the ID
 	var id = 1;
 	while ($('#nb_item').length) { // Because ids are duplicated
@@ -175,11 +174,11 @@ $(document).ready(function()
 		$('.nb_item').val($(this).val());
 		reloadContent();
 	});
-	
+
 	paginationButton();
 	initLayered();
 });
-	
+
 function hideFilterValueAction(it)
 {
 	if (typeof(layered_hidden_list[$(it).parent().find('ul').attr('id')]) == 'undefined' || layered_hidden_list[$(it).parent().find('ul').attr('id')] == false)
@@ -210,7 +209,7 @@ function initSliders()
 {
 	$(sliderList).each(function(i, slider){
 		$('#layered_'+slider['type']+'_slider').slider(slider['data']);
-		
+
 		var from = '';
 		var to = '';
 		switch (slider['format'])
@@ -259,7 +258,7 @@ function paginationButton() {
 			nbPage = parseInt($('#pagination li.current').children().html())+ 1;
 		else if ($(this).attr('id') == 'pagination_previous')
 			nbPage = parseInt($('#pagination li.current').children().html())- 1;
-	
+
 		$(this).children().click(function () {
 			if (nbPage == 0)
 				p = parseInt($(this).html()) + parseInt(nbPage);
@@ -325,7 +324,7 @@ function openCloseFilter()
 			$(this).html('&lt;');
 			$(this).parent().addClass('closed');
 		}
-		
+
 		e.preventDefault();
 	});
 }
@@ -336,21 +335,21 @@ function stopAjaxQuery() {
 	for(i = 0; i < ajaxQueries.length; i++) {
 		if (typeof ajaxQueries[i] != 'undefined')
 			ajaxQueries[i].abort();
-	}		
+	}
 	ajaxQueries = new Array();
 }
 
 function reloadContent(params_plus)
 {
 	stopAjaxQuery();
-	
+
 	if (!ajaxLoaderOn)
 	{
 		$('#product_list').prepend($('#layered_ajax_loader').html());
 		$('#product_list').css('opacity', '0.7');
 		ajaxLoaderOn = 1;
 	}
-	
+
 	data = $('#layered_form').serialize();
 	$('.layered_slider').each( function () {
 		var sliderStart = $(this).slider('values', 0);
@@ -366,14 +365,14 @@ function reloadContent(params_plus)
 			data += '&layered_'+sliderType+'_slider='+$('#layered_'+sliderType+'_range_min').val()+'_'+$('#layered_'+sliderType+'_range_max').val();
 		}
 	});
-	
+
 	$('#layered_form .select option').each( function () {
 		if($(this).attr('id') && $(this).parent().val() == $(this).val())
 		{
 			data += '&'+$(this).attr('id') + '=' + $(this).val();
 		}
 	});
-	
+
 	if ($('.selectProductSort').length && $('.selectProductSort').val())
 	{
 		if ($('.selectProductSort').val().search(/orderby=/) > 0)
@@ -395,21 +394,21 @@ function reloadContent(params_plus)
 	{
 		data += '&n='+$('.nb_item').val();
 	}
-	
+
 	var slideUp = true;
 	if (params_plus == undefined || !(typeof params_plus == 'string'))
 	{
 		params_plus = '';
 		slideUp = false;
 	}
-	
+
 	// Get nb items per page
 	var n = '';
 	$('#pagination #nb_item').children().each(function(it, option) {
 		if (option.selected)
 			n = '&n='+option.value;
 	});
-	
+
 	ajaxQuery = $.ajax(
 	{
 		type: 'GET',
@@ -420,9 +419,9 @@ function reloadContent(params_plus)
 		success: function(result)
 		{
 			$('#layered_block_left').replaceWith(utf8_decode(result.filtersBlock));
-			
+
 			$('.category-product-count').html(result.categoryCount);
-			
+
 			if (result.productList)
 				$('#product_list').replaceWith(utf8_decode(result.productList));
 			else
@@ -458,10 +457,10 @@ function reloadContent(params_plus)
 				$('ul.pagination').html('');
 				$('div#pagination').hide();
 			}
-			
+
 			paginationButton();
 			ajaxLoaderOn = 0;
-			
+
 			// On submiting nb items form, relaod with the good nb of items
 			$('#pagination form').submit(function() {
 				val = $('#pagination #nb_item').val();
@@ -477,15 +476,15 @@ function reloadContent(params_plus)
 			});
 			if (typeof(ajaxCart) != "undefined")
 				ajaxCart.overrideButtonsInThePage();
-			
+
 			if (typeof(reloadProductComparison) == 'function')
 				reloadProductComparison();
 			initSliders();
-			
+
 			// Currente page url
 			if (typeof(current_friendly_url) == 'undefined')
 				current_friendly_url = '#';
-				
+
 			// Get all sliders value
 			$(['price', 'weight']).each(function(it, sliderType)
 			{
@@ -508,11 +507,11 @@ function reloadContent(params_plus)
 			});
 			window.location = current_friendly_url;
 			lockLocationChecking = true;
-			
+
 			if(slideUp)
 				$.scrollTo('#product_list', 400);
 			updateProductUrl();
-			
+
 			$('.hide-action').each(function() {
 				hideFilterValueAction(this);
 			});
@@ -532,7 +531,7 @@ function initLocationChange(func, time)
 			// Don't reload page if current_friendly_url and real url match
 			if (current_friendly_url.replace(/^#(\/)?/, '') == getUrlParams().replace(/^#(\/)?/, ''))
 				return;
-			
+
 			lockLocationChecking = true;
 			reloadContent('&selected_filters='+getUrlParams().replace(/^#/, ''));
 		}

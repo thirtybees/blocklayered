@@ -1,4 +1,4 @@
-/*
+/**
  * HTML5 Sortable jQuery Plugin
  * http://farhadi.ir/projects/html5sortable
  * 
