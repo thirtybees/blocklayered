@@ -1,3 +1,27 @@
+{**
+ * Copyright (C) 2017-2018 thirty bees
+ * Copyright (C) 2007-2016 PrestaShop SA
+ *
+ * thirty bees is an extension to the PrestaShop software by PrestaShop SA.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@thirtybees.com so we can send you a copy immediately.
+ *
+ * @author    thirty bees <modules@thirtybees.com>
+ * @author    PrestaShop SA <contact@prestashop.com>
+ * @copyright 2017-2018 thirty bees
+ * @copyright 2007-2016 PrestaShop SA
+ * @license   Academic Free License (AFL 3.0)
+ * PrestaShop is an internationally registered trademark of PrestaShop SA.
+ *}
+
 {if isset($message)}{$message}{/if}
 <fieldset>
 	<legend><img src="{$uri}/img/cogs.gif" alt="{l s='Configuration' mod='blocklayered'}" /> {l s='New filters template' mod='blocklayered'}</legend>
@@ -9,7 +33,7 @@
 					<td class="label">{l s='Template name:' mod='blocklayered'}</td>
 					<td>
 						<input type="text" id="layered_tpl_name" name="layered_tpl_name" maxlength="64" value="{$template_name}" />
-						<p class="help-block">{l s='Only as a reminder' mod='blocklayered'}</p>	
+						<p class="help-block">{l s='Only as a reminder' mod='blocklayered'}</p>
 					</td>
 				</tr>
 				<tr>
