@@ -52,6 +52,7 @@ class BlockLayered extends Module
 
         $this->displayName = $this->l('Block Layered Navigation');
         $this->description = $this->l('Displays a block with layered navigation filters.');
+        $this->tb_versions_compliancy = '> 1.0.0';
         $this->ps_versions_compliancy = ['min' => '1.6', 'max' => '1.6.99.99'];
 
         if ((int) Tools::getValue('p')) {
