@@ -307,7 +307,14 @@ class BlockLayered extends Module
         $values = false;
 
         foreach ($res as $filterTemplate) {
-            $data = unserialize($filterTemplate['filters']);
+            $data = json_decode($filterTemplate['filters'], true);
+            // Retrocompatibility for module versions <= 3.0.3, which used to
+            // store data not JSON encoded, but serialized. Can get removed a
+            // couple of releases later.
+            if ( ! $data) {
+                $data = Tools::unSerialize($filterTemplate['filters']);
+            }
+
             foreach ($data['shop_list'] as $idShop) {
                 if (!isset($categories[$idShop])) {
                     $categories[$idShop] = [];
@@ -529,7 +536,7 @@ class BlockLayered extends Module
         if ($toInsert) {
             Db::getInstance()->execute(
                 'INSERT INTO '._DB_PREFIX_.'layered_filter(name, filters, n_categories, date_add)
-				VALUES (\''.sprintf($this->l('My template %s'), date('Y-m-d')).'\', \''.pSQL(serialize($filterData)).'\', '.count($filterData['categories']).', NOW())'
+				VALUES (\''.sprintf($this->l('My template %s'), date('Y-m-d')).'\', \''.pSQL(json_encode($filterData)).'\', '.count($filterData['categories']).', NOW())'
             );
 
             $lastId = Db::getInstance()->Insert_ID();
@@ -1150,7 +1157,7 @@ class BlockLayered extends Module
                     );
 
                     if ($idLayeredFriendlyUrl == false) {
-                        Db::getInstance()->insert('layered_friendly_url', ['url_key' => $urlKey, 'data' => serialize($selectedFilters), 'id_lang' => (int) $idLang]);
+                        Db::getInstance()->insert('layered_friendly_url', ['url_key' => $urlKey, 'data' => json_encode($selectedFilters), 'id_lang' => (int) $idLang]);
                         $idLayeredFriendlyUrl = Db::getInstance()->Insert_ID();
                     }
                 }
@@ -1808,7 +1815,16 @@ class BlockLayered extends Module
                             foreach ($url_parameters as $url_parameter) {
                                 $data = Db::getInstance()->getValue('SELECT data FROM `'._DB_PREFIX_.'layered_friendly_url` WHERE `url_key` = \''.md5('/'.$attribute_name.$this->getAnchor().$url_parameter).'\'');
                                 if ($data) {
-                                    foreach (Tools::unSerialize($data) as $key_params => $params) {
+                                    $data = json_decode($data, true);
+                                    // Retrocompatibility for module versions
+                                    // <= 3.0.3, which used to store data not
+                                    // JSON encoded, but serialized. Can get
+                                    // removed a couple of releases later.
+                                    if ( ! $data) {
+                                        $data = Tools::unSerialize($data);
+                                    }
+
+                                    foreach ($data as $key_params => $params) {
                                         if (!isset($selected_filters[$key_params])) {
                                             $selected_filters[$key_params] = [];
                                         }
@@ -3363,13 +3379,19 @@ class BlockLayered extends Module
         );
 
         foreach ($layered_filter_list as $layered_filter) {
-            $data = Tools::unSerialize($layered_filter['filters']);
+            $data = json_decode($layered_filter['filters'], true);
+            // Retrocompatibility for module versions <= 3.0.3, which used to
+            // store data not JSON encoded, but serialized. Can get removed a
+            // couple of releases later.
+            if ( ! $data) {
+                $data = Tools::unSerialize($layered_filter['filters']);
+            }
 
             if (in_array((int) $params['category']->id, $data['categories'])) {
                 unset($data['categories'][array_search((int) $params['category']->id, $data['categories'])]);
                 Db::getInstance()->execute(
                     'UPDATE `'._DB_PREFIX_.'layered_filter`
-					SET `filters` = \''.pSQL(serialize($data)).'\'
+					SET `filters` = \''.pSQL(json_encode($data)).'\'
 					WHERE `id_layered_filter` = '.(int) $layered_filter['id_layered_filter']
                 );
             }
@@ -3475,7 +3497,7 @@ class BlockLayered extends Module
 
                     $values_to_insert = [
                         'name'         => pSQL(Tools::getValue('layered_tpl_name')),
-                        'filters'      => pSQL(serialize($filter_values)),
+                        'filters'      => pSQL(json_encode($filter_values)),
                         'n_categories' => (int) count($filter_values['categories']),
                         'date_add'     => date('Y-m-d H:i:s'),
                     ];
@@ -3646,7 +3668,13 @@ class BlockLayered extends Module
 				WHERE id_layered_filter = '.(int) Tools::getValue('id_layered_filter')
                 );
 
-                $filters = Tools::unSerialize($template['filters']);
+                $filters = json_decode($template['filters'], true);
+                // Retrocompatibility for module versions <= 3.0.3, which used to
+                // store data not JSON encoded, but serialized. Can get removed a
+                // couple of releases later.
+                if ( ! $filters) {
+                        $filters = Tools::unSerialize($template['filters']);
+                }
 
                 if (version_compare(_PS_VERSION_, '1.6.0', '>=') === true) {
                     $tree_categories_helper->setSelectedCategories($filters['categories']);
