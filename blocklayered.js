@@ -218,8 +218,8 @@ function initSliders()
 			case 2:
 			case 3:
 			case 4:
-				from = blocklayeredFormatCurrency($('#layered_'+slider['type']+'_slider').slider('values', 0), slider['format'], slider['unit']);
-				to = blocklayeredFormatCurrency($('#layered_'+slider['type']+'_slider').slider('values', 1), slider['format'], slider['unit']);
+				from = formatCurrency($('#layered_'+slider['type']+'_slider').slider('values', 0), slider['format'], slider['unit']);
+				to = formatCurrency($('#layered_'+slider['type']+'_slider').slider('values', 1), slider['format'], slider['unit']);
 				break;
 			case 5:
 				from =  $('#layered_'+slider['type']+'_slider').slider('values', 0)+slider['unit']
@@ -593,31 +593,6 @@ function utf8_decode (utfstr) {
 	}
 	return res;
 }
-
-
-/**
- * Return a formatted price
- * Copy from tools.js
- */
-function blocklayeredFormatCurrency(price, currencyFormat, currencySign, currencyBlank)
-{
-	// if you modified this function, don't forget to modify the PHP function displayPrice (in the Tools.php class)
-	blank = '';
-	price = parseFloat(price.toFixed(6));
-	price = ps_round(price, priceDisplayPrecision);
-	if (currencyBlank > 0)
-		blank = ' ';
-	if (currencyFormat == 1)
-		return currencySign + blank + blocklayeredFormatNumber(price, priceDisplayPrecision, ',', '.');
-	if (currencyFormat == 2)
-		return (blocklayeredFormatNumber(price, priceDisplayPrecision, ' ', ',') + blank + currencySign);
-	if (currencyFormat == 3)
-		return (currencySign + blank + blocklayeredFormatNumber(price, priceDisplayPrecision, '.', ','));
-	if (currencyFormat == 4)
-		return (blocklayeredFormatNumber(price, priceDisplayPrecision, ',', '.') + blank + currencySign);
-	return price;
-}
-
 
 /**
  * Return a formatted number
