@@ -171,7 +171,11 @@ param_product_url = '';
 											{/literal}
 											{/if}
 											{literal}
-											$('#layered_{/literal}{$filter.type}{literal}_range').html(from+' - '+to);
+											if (isRtl) {
+												$('#layered_{/literal}{$filter.type}{literal}_range').html(to+' - '+from);
+											} else {
+												$('#layered_{/literal}{$filter.type}{literal}_range').html(from+' - '+to);
+											}
 										},
 										stop: function () {
 											reloadContent();
