@@ -43,7 +43,7 @@ class BlockLayered extends Module
     {
         $this->name = 'blocklayered';
         $this->tab = 'front_office_features';
-        $this->version = '3.0.1';
+        $this->version = '3.0.2';
         $this->author = 'thirty bees';
         $this->need_instance = 0;
         $this->bootstrap = true;
