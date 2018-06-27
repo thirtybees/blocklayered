@@ -188,6 +188,7 @@ function hideFilterValueAction(it) {
 }
 
 function addSlider(type, data, unit, format) {
+  sliderList = sliderList.filter(slider => slider.type !== type);
   sliderList.push({
     type: type,
     data: data,
