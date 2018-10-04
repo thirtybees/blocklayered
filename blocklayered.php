@@ -142,7 +142,7 @@ class BlockLayered extends Module
 
     private static function getQuantityFilterSubQuery($filterValue, $ignoreJoin = false)
     {
-        if (count($filterValue) == 2 || empty($filterValue)) {
+        if (empty($filterValue) || count($filterValue) == 2) {
             return [];
         }
 
@@ -169,7 +169,7 @@ class BlockLayered extends Module
 
     private static function getConditionFilterSubQuery($filterValue, $ignoreJoin = false)
     {
-        if (count($filterValue) == 3 || empty($filterValue)) {
+        if (empty($filterValue) || count($filterValue) == 3) {
             return [];
         }
 
