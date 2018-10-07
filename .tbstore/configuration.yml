@@ -6,6 +6,7 @@ tags:
   - layered navigation
   - filtering
   - search
+  - blocklayered
 description_short: The block layered is also known as the layered navigation module and is used for filtering and searching.
 description: description.md
 images:
