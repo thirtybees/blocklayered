@@ -1408,8 +1408,8 @@ class BlockLayered extends Module
     }
 
     /*
-	 * Generate data product attribute
-	 */
+     * Generate data product attribute
+     */
 
     public function hookAfterSaveAttribute($params)
     {
@@ -1442,8 +1442,8 @@ class BlockLayered extends Module
     }
 
     /*
-	 * Url indexation
-	 */
+     * Url indexation
+     */
 
     public function hookAfterDeleteAttribute($params)
     {
@@ -1458,8 +1458,8 @@ class BlockLayered extends Module
     }
 
     /*
-	 * $cursor $cursor in order to restart indexing from the last state
-	 */
+     * $cursor $cursor in order to restart indexing from the last state
+     */
 
     public function hookPostProcessAttribute($params)
     {
@@ -1482,8 +1482,8 @@ class BlockLayered extends Module
     }
 
     /*
-	 * $cursor $cursor in order to restart indexing from the last state
-	 */
+     * $cursor $cursor in order to restart indexing from the last state
+     */
 
     public function hookAttributeForm($params)
     {
@@ -1560,8 +1560,8 @@ class BlockLayered extends Module
     }
 
     /*
-	 * $cursor $cursor in order to restart indexing from the last state
-	 */
+     * $cursor $cursor in order to restart indexing from the last state
+     */
 
     public function hookAfterDeleteFeature($params)
     {
