@@ -3479,11 +3479,7 @@ class BlockLayered extends Module
                 Configuration::updateValue('PS_LAYERED_FILTER_INDEX_CAT', (int) Tools::getValue('ps_layered_filter_index_category'));
                 Configuration::updateValue('PS_LAYERED_FILTER_PRICE_ROUNDING', (int) Tools::getValue('ps_layered_filter_price_rounding'));
 
-                if (version_compare(_PS_VERSION_, '1.6.0', '>=') === true) {
-                    $message = '<div class="alert alert-success">'.$this->l('Settings saved successfully').'</div>';
-                } else {
-                    $message = '<div class="conf">'.$this->l('Settings saved successfully').'</div>';
-                }
+                $message = '<div class="alert alert-success">'.$this->l('Settings saved successfully').'</div>';
             } else {
                 if (Tools::getValue('deleteFilterTemplate')) {
                     $layered_values = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue(
