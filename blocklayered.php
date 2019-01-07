@@ -3650,11 +3650,7 @@ class BlockLayered extends Module
                 );
             }
 
-            if (version_compare(_PS_VERSION_, '1.6.0', '>=') === true) {
-                return $this->display(__FILE__, 'views/templates/admin/add_1.6.tpl');
-            } else {
-                return $this->display(__FILE__, 'views/templates/admin/add.tpl');
-            }
+            return $this->display(__FILE__, 'views/templates/admin/add.tpl');
         } else {
             if (Tools::getValue('edit_filters_template')) {
                 $template = Db::getInstance()->getRow(
@@ -3700,11 +3696,7 @@ class BlockLayered extends Module
                     ]
                 );
 
-                if (version_compare(_PS_VERSION_, '1.6.0', '>=') === true) {
-                    return $this->display(__FILE__, 'views/templates/admin/add_1.6.tpl');
-                } else {
-                    return $this->display(__FILE__, 'views/templates/admin/add.tpl');
-                }
+                return $this->display(__FILE__, 'views/templates/admin/add.tpl');
             } else {
                 $this->context->smarty->assign(
                     [
