@@ -3625,11 +3625,7 @@ class BlockLayered extends Module
             }
         }
 
-        if (version_compare(_PS_VERSION_, '1.6.0', '>=') === true) {
-            $this->context->controller->addCSS($this->_path.'css/blocklayered_admin_1.6.css');
-        } else {
-            $this->context->controller->addCSS($this->_path.'css/blocklayered_admin.css');
-        }
+        $this->context->controller->addCSS($this->_path.'css/blocklayered_admin.css');
 
         if (Tools::getValue('add_new_filters_template')) {
             $this->context->smarty->assign(
