@@ -1794,7 +1794,7 @@ class BlockLayered extends Module
                         $this->page = (int) $url_parameters[0];
                     } else {
                         if (in_array($attribute_name, ['price', 'weight'])) {
-                            $selected_filters[$attribute_name] = [$this->filterVar($url_parameters[0]), $this->filterVar($url_parameters[1])];
+                            $selected_filters[$attribute_name] = [Tools::purifyHTML($url_parameters[0]), Tools::purifyHTML($url_parameters[1])];
                         } else {
                             foreach ($url_parameters as $url_parameter) {
                                 $data = Db::getInstance()->getValue('SELECT data FROM `'._DB_PREFIX_.'layered_friendly_url` WHERE `url_key` = \''.md5('/'.$attribute_name.$this->getAnchor().$url_parameter).'\'');
@@ -1816,7 +1816,7 @@ class BlockLayered extends Module
                                             if (!isset($selected_filters[$key_params][$key_param])) {
                                                 $selected_filters[$key_params][$key_param] = [];
                                             }
-                                            $selected_filters[$key_params][$key_param] = $this->filterVar($param);
+                                            $selected_filters[$key_params][$key_param] = Tools::purifyHTML($param);
                                         }
                                     }
                                 }
@@ -1835,8 +1835,8 @@ class BlockLayered extends Module
             if (substr($key, 0, 8) == 'layered_') {
                 preg_match('/^(.*)_([0-9]+|new|used|refurbished|slider)$/', substr($key, 8, strlen($key) - 8), $res);
                 if (isset($res[1])) {
-                    $tmp_tab = explode('_', $this->filterVar($value));
-                    $value = $this->filterVar($tmp_tab[0]);
+                    $tmp_tab = explode('_', Tools::purifyHTML($value));
+                    $value = Tools::purifyHTML($tmp_tab[0]);
                     $id_key = false;
                     if (isset($tmp_tab[1])) {
                         $id_key = $tmp_tab[1];
@@ -1875,15 +1875,6 @@ class BlockLayered extends Module
         }
 
         return $selected_filters;
-    }
-
-    protected function filterVar($value)
-    {
-        if (version_compare(_PS_VERSION_, '1.6.0.7', '>=') === true) {
-            return Tools::purifyHTML($value);
-        } else {
-            return filter_var($value, FILTER_SANITIZE_STRING);
-        }
     }
 
     public function getFilterBlock($selected_filters = [])
