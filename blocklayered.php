@@ -3726,11 +3726,7 @@ class BlockLayered extends Module
                     ]
                 );
 
-                if (version_compare(_PS_VERSION_, '1.6.0', '>=') === true) {
-                    return $this->display(__FILE__, 'views/templates/admin/view_1.6.tpl');
-                } else {
-                    return $this->display(__FILE__, 'views/templates/admin/view.tpl');
-                }
+                return $this->display(__FILE__, 'views/templates/admin/view.tpl');
             }
         }
     }
