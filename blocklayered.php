@@ -3583,14 +3583,7 @@ class BlockLayered extends Module
 
         if (method_exists($this->context->controller, 'addJquery')) {
             $this->context->controller->addJS($this->_path.'js/blocklayered_admin.js');
-
-            if (version_compare(_PS_VERSION_, '1.6.0.3', '>=') === true) {
-                $this->context->controller->addjqueryPlugin('sortable');
-            } elseif (version_compare(_PS_VERSION_, '1.6.0', '>=') === true) {
-                $this->context->controller->addJS(_PS_JS_DIR_.'jquery/plugins/jquery.sortable.js');
-            } else {
-                $this->context->controller->addJS($this->_path.'js/jquery.sortable.js');
-            }
+            $this->context->controller->addjqueryPlugin('sortable');
         }
 
         $this->context->controller->addCSS($this->_path.'css/blocklayered_admin.css');
