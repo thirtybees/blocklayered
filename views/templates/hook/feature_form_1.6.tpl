@@ -47,7 +47,7 @@
 			</div>
 			{/foreach}
 			<div class="col-lg-9">
-				<p class="help-block">{l s='When the Layered Navigation Block module is enabled, you can get more detailed URLs by choosing the word that best represent this feature. By default, PrestaShop uses the feature\'s name, but you can change that setting using this field.' mod='blocklayered'}</p>
+				<p class="help-block">{l s='When the Layered Navigation Block module is enabled, you can get more detailed URLs by choosing the word that best represent this feature. By default, thirty bees uses the feature\'s name, but you can change that setting using this field.' mod='blocklayered'}</p>
 			</div>
 		</div>
 	</div>
@@ -75,7 +75,7 @@
 			</div>
 			{/foreach}
 			<div class="col-lg-9">
-				<p class="help-block">{l s='When the Layered Navigation Block module is enabled, you can get more detailed page titles by choosing the word that best represent this feature. By default, PrestaShop uses the feature\'s name, but you can change that setting using this field.' mod='blocklayered'}</p>
+				<p class="help-block">{l s='When the Layered Navigation Block module is enabled, you can get more detailed page titles by choosing the word that best represent this feature. By default, thirty bees uses the feature\'s name, but you can change that setting using this field.' mod='blocklayered'}</p>
 			</div>
 		</div>
 	</div>
