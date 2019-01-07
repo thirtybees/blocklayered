@@ -3575,20 +3575,9 @@ class BlockLayered extends Module
             $this->context->smarty->assign('asso_shops', $helper->renderAssoShop());
         }
 
-        if (version_compare(_PS_VERSION_, '1.6.0', '>=') === true) {
-            $tree_categories_helper = new HelperTreeCategories('categories-treeview');
-            $tree_categories_helper->setRootCategory((Shop::getContext() == Shop::CONTEXT_SHOP ? Category::getRootCategory()->id_category : 0))
-                ->setUseCheckBox(true);
-        } else {
-            if (Shop::getContext() == Shop::CONTEXT_SHOP) {
-                $root_category = Category::getRootCategory();
-                $root_category = ['id_category' => $root_category->id_category, 'name' => $root_category->name];
-            } else {
-                $root_category = ['id_category' => '0', 'name' => $this->l('Root')];
-            }
-
-            $tree_categories_helper = new Helper();
-        }
+        $tree_categories_helper = new HelperTreeCategories('categories-treeview');
+        $tree_categories_helper->setRootCategory((Shop::getContext() == Shop::CONTEXT_SHOP ? Category::getRootCategory()->id_category : 0))
+            ->setUseCheckBox(true);
 
         $module_url = Tools::getProtocol(Tools::usingSecureMode()).$_SERVER['HTTP_HOST'].$this->getPathUri();
 
@@ -3619,15 +3608,7 @@ class BlockLayered extends Module
                 ]
             );
 
-            if (version_compare(_PS_VERSION_, '1.6.0', '>=') === true) {
-                $this->context->smarty->assign('categories_tree', $tree_categories_helper->render());
-            } else {
-                $this->context->smarty->assign(
-                    'categories_tree', $tree_categories_helper->renderCategoryTree(
-                    $root_category, [], 'categoryBox'
-                )
-                );
-            }
+            $this->context->smarty->assign('categories_tree', $tree_categories_helper->render());
 
             return $this->display(__FILE__, 'views/templates/admin/add.tpl');
         } else {
@@ -3647,16 +3628,8 @@ class BlockLayered extends Module
                         $filters = Tools::unSerialize($template['filters']);
                 }
 
-                if (version_compare(_PS_VERSION_, '1.6.0', '>=') === true) {
-                    $tree_categories_helper->setSelectedCategories($filters['categories']);
-                    $this->context->smarty->assign('categories_tree', $tree_categories_helper->render());
-                } else {
-                    $this->context->smarty->assign(
-                        'categories_tree', $tree_categories_helper->renderCategoryTree(
-                        $root_category, $filters['categories'], 'categoryBox'
-                    )
-                    );
-                }
+                $tree_categories_helper->setSelectedCategories($filters['categories']);
+                $this->context->smarty->assign('categories_tree', $tree_categories_helper->render());
 
                 $select_shops = $filters['shop_list'];
                 unset($filters['categories']);
