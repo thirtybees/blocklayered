@@ -1724,11 +1724,7 @@ class BlockLayered extends Module
             ]
         );
 
-        if (version_compare(_PS_VERSION_, '1.6.0', '>=') === true) {
-            return $this->display(__FILE__, 'feature_value_form_1.6.tpl');
-        } else {
-            return $this->display(__FILE__, 'feature_value_form.tpl');
-        }
+        return $this->display(__FILE__, 'feature_value_form.tpl');
     }
 
     public function hookProductListAssign($params)
