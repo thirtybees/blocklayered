@@ -3749,9 +3749,7 @@ class BlockLayered extends Module
             ]
         );
 
-        if (version_compare(_PS_VERSION_, '1.6.0', '>=') === true) {
-            $this->context->controller->addColorsToProductList($products);
-        }
+        $this->context->controller->addColorsToProductList($products);
 
         $category = new Category(Tools::getValue('id_category_layered', Configuration::get('PS_HOME_CATEGORY')), (int) $cookie->id_lang);
 
