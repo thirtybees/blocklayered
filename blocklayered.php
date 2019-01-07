@@ -3831,17 +3831,9 @@ class BlockLayered extends Module
             'filters'              => $filter_block['filters'],
             'nbRenderedProducts'   => (int) $nb_products,
             'nbAskedProducts'      => (int) $n,
+            'pagination_bottom'    => $smarty->assign('paginationId', 'bottom')
+                                             ->fetch(_PS_THEME_DIR_.'pagination.tpl'),
         ];
-
-        if (version_compare(_PS_VERSION_, '1.6.0', '>=') === true) {
-            $vars = array_merge(
-                $vars, [
-                'pagination_bottom' => $smarty
-                    ->assign('paginationId', 'bottom')
-                    ->fetch(_PS_THEME_DIR_.'pagination.tpl'),
-                ]
-            );
-        }
 
         /* We are sending an array in jSon to the .js controller, it will update both the filters and the products zones */
 
