@@ -1843,15 +1843,15 @@ class BlockLayered extends Module
                             $selected_filters[$attribute_name] = [Tools::purifyHTML($url_parameters[0]), Tools::purifyHTML($url_parameters[1])];
                         } else {
                             foreach ($url_parameters as $url_parameter) {
-                                $data = Db::getInstance()->getValue('SELECT data FROM `'._DB_PREFIX_.'layered_friendly_url` WHERE `url_key` = \''.md5('/'.$attribute_name.$this->getAnchor().$url_parameter).'\'');
-                                if ($data) {
-                                    $data = json_decode($data, true);
+                                $result = Db::getInstance()->getValue('SELECT data FROM `'._DB_PREFIX_.'layered_friendly_url` WHERE `url_key` = \''.md5('/'.$attribute_name.$this->getAnchor().$url_parameter).'\'');
+                                if ($result) {
+                                    $data = json_decode($result, true);
                                     // Retrocompatibility for module versions
                                     // <= 3.0.3, which used to store data not
                                     // JSON encoded, but serialized. Can get
                                     // removed a couple of releases later.
                                     if ( ! $data) {
-                                        $data = Tools::unSerialize($data);
+                                        $data = Tools::unSerialize($result);
                                     }
 
                                     foreach ($data as $key_params => $params) {
