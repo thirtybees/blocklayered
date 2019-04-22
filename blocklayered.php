@@ -52,8 +52,8 @@ class BlockLayered extends Module
 
         $this->displayName = $this->l('Block Layered Navigation');
         $this->description = $this->l('Displays a block with layered navigation filters.');
-        $this->tb_versions_compliancy = '> 1.0.0';
-        $this->tb_min_version = '1.0.0';
+        $this->tb_versions_compliancy = '>= 1.1.0';
+        $this->tb_min_version = '1.1.0';
         $this->ps_versions_compliancy = ['min' => '1.6', 'max' => '1.6.99.99'];
 
         if ((int) Tools::getValue('p')) {
@@ -244,12 +244,6 @@ class BlockLayered extends Module
     {
         @set_time_limit(0);
 
-        /* Set memory limit to 128M only if current is lower */
-        $memoryLimit = @ini_get('memory_limit');
-        if (substr($memoryLimit, -1) != 'G' && ((substr($memoryLimit, -1) == 'M' && substr($memoryLimit, 0, -1) < 128) || is_numeric($memoryLimit) && (intval($memoryLimit) < 131072))) {
-            @ini_set('memory_limit', '128M');
-        }
-
         /* Delete and re-create the layered categories table */
         Db::getInstance()->execute('DROP TABLE IF EXISTS '._DB_PREFIX_.'layered_category');
         Db::getInstance()->execute(
@@ -384,12 +378,6 @@ class BlockLayered extends Module
         @set_time_limit(0);
 
         $filterData = ['categories' => []];
-
-        /* Set memory limit to 128M only if current is lower */
-        $memoryLimit = @ini_get('memory_limit');
-        if (substr($memoryLimit, -1) != 'G' && ((substr($memoryLimit, -1) == 'M' && substr($memoryLimit, 0, -1) < 128) || is_numeric($memoryLimit) && (intval($memoryLimit) < 131072))) {
-            @ini_set('memory_limit', '128M');
-        }
 
         $db = Db::getInstance(_PS_USE_SQL_SLAVE_);
         $nCategories = [];
