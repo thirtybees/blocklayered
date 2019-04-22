@@ -871,9 +871,22 @@ class BlockLayered extends Module
             // Get min price
             foreach ($currencyList as $currency) {
                 $price = Product::priceCalculation(
-                    $idShop, (int) $idProduct, null, null, null, null,
-                    $currency['id_currency'], null, null, false, 6, false, true, true,
-                    $specificPriceOutput, true
+                    $idShop,
+                    (int) $idProduct,
+                    null,
+                    null,
+                    null,
+                    null,
+                    $currency['id_currency'],
+                    null,
+                    null,
+                    false,
+                    _TB_PRICE_DATABASE_PRECISION_,
+                    false,
+                    true,
+                    true,
+                    $specificPriceOutput,
+                    true
                 );
 
                 if (!isset($maxPrice[$currency['id_currency']])) {
@@ -899,10 +912,28 @@ class BlockLayered extends Module
                         continue;
                     }
                     $price = Product::priceCalculation(
-                        (($specificPrice['id_shop'] == 0) ? null : (int) $specificPrice['id_shop']), (int) $idProduct,
-                        null, (($specificPrice['id_country'] == 0) ? null : $specificPrice['id_country']), null, null,
-                        $currency['id_currency'], (($specificPrice['id_group'] == 0) ? null : $specificPrice['id_group']),
-                        $specificPrice['from_quantity'], false, 6, false, true, true, $specificPriceOutput, true
+                        (($specificPrice['id_shop'] == 0) ?
+                            null :
+                            (int) $specificPrice['id_shop']),
+                        (int) $idProduct,
+                        null,
+                        (($specificPrice['id_country'] == 0) ?
+                            null :
+                            $specificPrice['id_country']),
+                        null,
+                        null,
+                        $currency['id_currency'],
+                        (($specificPrice['id_group'] == 0) ?
+                            null :
+                            $specificPrice['id_group']),
+                        $specificPrice['from_quantity'],
+                        false,
+                        _TB_PRICE_DATABASE_PRECISION_,
+                        false,
+                        true,
+                        true,
+                        $specificPriceOutput,
+                        true
                     );
 
                     if (!isset($maxPrice[$currency['id_currency']])) {
@@ -926,8 +957,22 @@ class BlockLayered extends Module
             foreach ($groups as $group) {
                 foreach ($currencyList as $currency) {
                     $price = Product::priceCalculation(
-                        null, (int) $idProduct, null, null, null, null, (int) $currency['id_currency'], (int) $group['id_group'],
-                        null, false, 6, false, true, true, $specificPriceOutput, true
+                        null,
+                        (int) $idProduct,
+                        null,
+                        null,
+                        null,
+                        null,
+                        (int) $currency['id_currency'],
+                        (int) $group['id_group'],
+                        null,
+                        false,
+                        _TB_PRICE_DATABASE_PRECISION_,
+                        false,
+                        true,
+                        true,
+                        $specificPriceOutput,
+                        true
                     );
 
                     if (!isset($maxPrice[$currency['id_currency']])) {
