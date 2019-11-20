@@ -43,7 +43,7 @@ class BlockLayered extends Module
     {
         $this->name = 'blocklayered';
         $this->tab = 'front_office_features';
-        $this->version = '3.0.5';
+        $this->version = '3.1.0';
         $this->author = 'thirty bees';
         $this->need_instance = 0;
         $this->bootstrap = true;
@@ -52,8 +52,8 @@ class BlockLayered extends Module
 
         $this->displayName = $this->l('Block Layered Navigation');
         $this->description = $this->l('Displays a block with layered navigation filters.');
-        $this->tb_versions_compliancy = '>= 1.1.0';
-        $this->tb_min_version = '1.1.0';
+        $this->tb_versions_compliancy = '>= 1.0.0';
+        $this->tb_min_version = '1.0.0';
         $this->ps_versions_compliancy = ['min' => '1.6', 'max' => '1.6.99.99'];
 
         if ((int) Tools::getValue('p')) {
