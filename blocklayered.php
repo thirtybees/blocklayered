@@ -1753,6 +1753,11 @@ class BlockLayered extends Module
         return $this->display(__FILE__, 'feature_value_form.tpl');
     }
 
+    /**
+     * @param array $params
+     * @return false|void
+     * @throws PrestaShopException
+     */
     public function hookProductListAssign($params)
     {
         if ((isset($this->context->controller->display_column_left) && !$this->context->controller->display_column_left)
@@ -1761,7 +1766,6 @@ class BlockLayered extends Module
             return false;
         }
 
-        global $smarty;
         if (!Configuration::getGlobalValue('PS_LAYERED_INDEXED')) {
             return;
         }
@@ -1792,10 +1796,10 @@ class BlockLayered extends Module
             }
         }
 
-        $smarty->assign('categoryNameComplement', $title);
+        $this->context->smarty->assign('categoryNameComplement', $title);
         $this->getProducts($selected_filters, $params['catProducts'], $params['nbProducts'], $p, $n, $pages_nb, $start, $stop, $range);
         // Need a nofollow on the pagination links?
-        $smarty->assign('no_follow', $filter_block['no_follow']);
+        $this->context->smarty->assign('no_follow', $filter_block['no_follow']);
     }
 
     private function getSelectedFilters()
@@ -3151,7 +3155,6 @@ class BlockLayered extends Module
 
     public function generateFiltersBlock($selected_filters)
     {
-        global $smarty;
         if ($filter_block = $this->getFilterBlock($selected_filters)) {
             if ($filter_block['nbr_filterBlocks'] == 0) {
                 return false;
@@ -3161,8 +3164,8 @@ class BlockLayered extends Module
             $translate['price'] = $this->l('price');
             $translate['weight'] = $this->l('weight');
 
-            $smarty->assign($filter_block);
-            $smarty->assign(
+            $this->context->smarty->assign($filter_block);
+            $this->context->smarty->assign(
                 [
                     'hide_0_values'          => Configuration::get('PS_LAYERED_HIDE_0_VALUES'),
                     'blocklayeredSliderName' => $translate,
@@ -3184,7 +3187,8 @@ class BlockLayered extends Module
             return false;
         }
 
-        global $smarty, $cookie;
+        $smarty = $this->context->smarty;
+        $cookie = $this->context->cookie;
 
         // No filters => module disable
         if ($filter_block = $this->getFilterBlock($this->getSelectedFilters())) {
@@ -3675,9 +3679,16 @@ class BlockLayered extends Module
         return $return;
     }
 
+    /**
+     * @return false|string
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     * @throws SmartyException
+     */
     public function ajaxCall()
     {
-        global $smarty, $cookie;
+        $smarty = $this->context->smarty;
+        $cookie = $this->context->cookie;
 
         $selected_filters = $this->getSelectedFilters();
         $filter_block = $this->getFilterBlock($selected_filters);
