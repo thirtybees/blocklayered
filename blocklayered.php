@@ -2179,19 +2179,21 @@ class BlockLayered extends Module
             }
 
             foreach ($filters as $filter_tmp) {
-                $method_name = 'get'.ucfirst($filter_tmp['type']).'FilterSubQuery';
+                $filterType = $filter_tmp['type'];
+                $method_name = 'get'.ucfirst($filterType).'FilterSubQuery';
                 if (method_exists('BlockLayered', $method_name) &&
-                    ($filter['type'] != 'price' && $filter['type'] != 'weight' && $filter['type'] != $filter_tmp['type'] || $filter['type'] == $filter_tmp['type'])
+                    ($filter['type'] != 'price' && $filter['type'] != 'weight' && $filter['type'] != $filterType || $filter['type'] == $filterType)
                 ) {
-                    if ($filter['type'] == $filter_tmp['type'] && $filter['id_value'] == $filter_tmp['id_value']) {
+                    if ($filter['type'] == $filterType && $filter['id_value'] == $filter_tmp['id_value']) {
                         $sub_query_filter = self::$method_name([], true);
                     } else {
+                        $selected_filters_raw = isset($selected_filters[$filterType]) ? $selected_filters[$filterType] : null;
                         if (!is_null($filter_tmp['id_value'])) {
-                            $selected_filters_cleaned = $this->cleanFilterByIdValue(@$selected_filters[$filter_tmp['type']], $filter_tmp['id_value']);
+                            $selected_filters_cleaned = $this->cleanFilterByIdValue($selected_filters_raw, $filter_tmp['id_value']);
                         } else {
-                            $selected_filters_cleaned = @$selected_filters[$filter_tmp['type']];
+                            $selected_filters_cleaned = $selected_filters_raw;
                         }
-                        $sub_query_filter = self::$method_name($selected_filters_cleaned, $filter['type'] == $filter_tmp['type']);
+                        $sub_query_filter = self::$method_name($selected_filters_cleaned, $filter['type'] == $filterType);
                     }
                     foreach ($sub_query_filter as $key => $value) {
                         $sql_query[$key] .= $value;
