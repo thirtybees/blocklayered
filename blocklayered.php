@@ -93,6 +93,8 @@ class BlockLayered extends Module
      * @param bool $ignore_join
      *
      * @return array
+     * @noinspection PhpUnused
+     * @noinspection PhpUnusedPrivateMethodInspection
      */
     private static function getPriceFilterSubQuery($filterValue, $ignore_join = false)
     {
@@ -114,6 +116,8 @@ class BlockLayered extends Module
      * @param bool $ignoreJoin
      *
      * @return array
+     * @noinspection PhpUnused
+     * @noinspection PhpUnusedPrivateMethodInspection
      */
     private static function getWeightFilterSubQuery($filterValue, $ignoreJoin = false)
     {
@@ -131,6 +135,8 @@ class BlockLayered extends Module
      * @param bool $ignoreJoin
      *
      * @return array
+     * @noinspection PhpUnused
+     * @noinspection PhpUnusedPrivateMethodInspection
      */
     private static function getId_featureFilterSubQuery($filterValue, $ignoreJoin = false)
     {
@@ -151,6 +157,8 @@ class BlockLayered extends Module
      * @param bool $ignoreJoin
      *
      * @return array
+     * @noinspection PhpUnused
+     * @noinspection PhpUnusedPrivateMethodInspection
      */
     private static function getId_attribute_groupFilterSubQuery($filterValue, $ignoreJoin = false)
     {
@@ -176,6 +184,8 @@ class BlockLayered extends Module
      * @param bool $ignoreJoin
      *
      * @return array
+     * @noinspection PhpUnused
+     * @noinspection PhpUnusedPrivateMethodInspection
      */
     private static function getCategoryFilterSubQuery($filterValue, $ignoreJoin = false)
     {
@@ -198,6 +208,8 @@ class BlockLayered extends Module
      * @param bool $ignoreJoin
      *
      * @return array
+     * @noinspection PhpUnused
+     * @noinspection PhpUnusedPrivateMethodInspection
      */
     private static function getQuantityFilterSubQuery($filterValue, $ignoreJoin = false)
     {
@@ -216,6 +228,8 @@ class BlockLayered extends Module
      * @param bool $ignoreJoin
      *
      * @return array
+     * @noinspection PhpUnused
+     * @noinspection PhpUnusedPrivateMethodInspection
      */
     private static function getManufacturerFilterSubQuery($filterValue, $ignoreJoin = false)
     {
@@ -237,6 +251,8 @@ class BlockLayered extends Module
      * @param bool $ignoreJoin
      *
      * @return array
+     * @noinspection PhpUnused
+     * @noinspection PhpUnusedPrivateMethodInspection
      */
     private static function getConditionFilterSubQuery($filterValue, $ignoreJoin = false)
     {
@@ -1354,7 +1370,6 @@ class BlockLayered extends Module
 
                     if ($idLayeredFriendlyUrl == false) {
                         Db::getInstance()->insert('layered_friendly_url', ['url_key' => $urlKey, 'data' => json_encode($selectedFilters), 'id_lang' => (int) $idLang]);
-                        $idLayeredFriendlyUrl = Db::getInstance()->Insert_ID();
                     }
                 }
             }
@@ -1585,8 +1600,6 @@ class BlockLayered extends Module
      */
     public function hookPostProcessAttributeGroup($params)
     {
-        $errors = [];
-
         foreach (Language::getLanguages(false) as $language) {
             $id_lang = $language['id_lang'];
 
@@ -1726,8 +1739,6 @@ class BlockLayered extends Module
      */
     public function hookPostProcessAttribute($params)
     {
-        $errors = [];
-
         foreach (Language::getLanguages(false) as $language) {
             $id_lang = $language['id_lang'];
 
@@ -1864,8 +1875,6 @@ class BlockLayered extends Module
      */
     public function hookPostProcessFeature($params)
     {
-        $errors = [];
-
         foreach (Language::getLanguages(false) as $language) {
             $id_lang = $language['id_lang'];
 
@@ -1994,8 +2003,6 @@ class BlockLayered extends Module
      */
     public function hookPostProcessFeatureValue($params)
     {
-        $errors = [];
-
         foreach (Language::getLanguages(false) as $language) {
             $id_lang = $language['id_lang'];
 
@@ -2228,7 +2235,6 @@ class BlockLayered extends Module
      */
     public function getFilterBlock($selected_filters = [])
     {
-        global $cookie;
         static $cache = null;
 
         $context = Context::getContext();
@@ -2574,7 +2580,6 @@ class BlockLayered extends Module
                                     $nbr_of_value = 4;
                                 }
                                 $delta = ($price_array['max'] - $price_array['min']) / $nbr_of_value;
-                                $current_step = $price_array['min'];
                                 for ($i = 0; $i < $nbr_of_value; $i++) {
                                     $price_array['list_of_values'][] = [
                                         (int) ($price_array['min'] + $i * $delta),
@@ -2920,7 +2925,7 @@ class BlockLayered extends Module
                 }
                 $meta_values[$attr_key]['values'][] = $filter_meta;
             } else {
-                foreach ($type_filter['values'] as $key => $value) {
+                foreach ($type_filter['values'] as $value) {
                     if (is_array($value) && array_key_exists('checked', $value)) {
                         $value_name = !empty($value['url_name']) ? $value['url_name'] : $value['name'];
                         $value_meta = !empty($value['meta_title']) ? $value['meta_title'] : $value['name'];
@@ -3167,7 +3172,6 @@ class BlockLayered extends Module
         $nb_products = $this->nbr_products;
         $range = 2; /* how many pages around page selected */
 
-        $product_per_page = isset($this->context->cookie->nb_item_per_page) ? (int) $this->context->cookie->nb_item_per_page : Configuration::get('PS_PRODUCTS_PER_PAGE');
         $n = (int) Tools::getValue('n', Configuration::get('PS_PRODUCTS_PER_PAGE'));
 
         if ($n <= 0) {
@@ -3440,7 +3444,6 @@ class BlockLayered extends Module
         if ($this->nbr_products == 0) {
             $this->products = [];
         } else {
-            $product_per_page = isset($this->context->cookie->nb_item_per_page) ? (int) $this->context->cookie->nb_item_per_page : Configuration::get('PS_PRODUCTS_PER_PAGE');
             $default_products_per_page = max(1, (int) Configuration::get('PS_PRODUCTS_PER_PAGE'));
             $n = $default_products_per_page;
             if (isset($this->context->cookie->nb_item_per_page)) {
@@ -3863,12 +3866,10 @@ class BlockLayered extends Module
                     }
 
                     $filter_values['shop_list'] = $shop_list;
-                    $values = false;
 
-                    foreach ($_POST['categoryBox'] as $id_category_layered) {
+                    if ($_POST['categoryBox']) {
                         foreach ($_POST as $key => $value) {
                             if (substr($key, 0, 17) == 'layered_selection' && $value == 'on') {
-                                $values = true;
                                 $type = 0;
                                 $limit = 0;
 
@@ -3956,7 +3957,6 @@ class BlockLayered extends Module
             }
         }
 
-        $category_box = [];
         $attribute_groups = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS(
             '
 			SELECT ag.id_attribute_group, ag.is_color_group, agl.name, COUNT(DISTINCT(a.id_attribute)) n
@@ -4033,7 +4033,6 @@ class BlockLayered extends Module
                 $tree_categories_helper->setSelectedCategories($filters['categories']);
                 $this->context->smarty->assign('categories_tree', $tree_categories_helper->render());
 
-                $select_shops = $filters['shop_list'];
                 unset($filters['categories']);
                 unset($filters['shop_list']);
 
