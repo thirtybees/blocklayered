@@ -1790,7 +1790,9 @@ class BlockLayered extends Module
         $filter_block = $this->getFilterBlock($selected_filters);
         $title = '';
 
-        if (is_array($filter_block['title_values'])) {
+        $noFollow = false;
+        if ($filter_block && is_array($filter_block['title_values'])) {
+            $noFollow = $filter_block['no_follow'];
             foreach ($filter_block['title_values'] as $key => $val) {
                 $title .= ' > '.$key.' '.implode('/', $val);
             }
@@ -1799,7 +1801,7 @@ class BlockLayered extends Module
         $this->context->smarty->assign('categoryNameComplement', $title);
         $this->getProducts($selected_filters, $params['catProducts'], $params['nbProducts'], $p, $n, $pages_nb, $start, $stop, $range);
         // Need a nofollow on the pagination links?
-        $this->context->smarty->assign('no_follow', $filter_block['no_follow']);
+        $this->context->smarty->assign('no_follow', $noFollow);
     }
 
     private function getSelectedFilters()
