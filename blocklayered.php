@@ -4047,7 +4047,7 @@ class BlockLayered extends Module
                         'template_name'     => $template['name'],
                         'attribute_groups'  => $attribute_groups,
                         'features'          => $features,
-                        'filters'           => Tools::jsonEncode($filters),
+                        'filters'           => json_encode($filters),
                         'total_filters'     => 6 + count($attribute_groups) + count($features),
                     ]
                 );
