@@ -1180,40 +1180,40 @@ class BlockLayered extends Module
             return;
         }
 
-        foreach ($filters as $filter)
+        foreach ($filters as $filter) {
             switch ($filter['type']) {
                 case 'id_attribute_group':
                     $attributes = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS(
                         '
 						SELECT agl.public_name name, a.id_attribute_group id_name, al.name value, a.id_attribute id_value, al.id_lang,
 						liagl.url_name name_url_name, lial.url_name value_url_name
-						FROM '._DB_PREFIX_.'attribute_group ag
-						INNER JOIN '._DB_PREFIX_.'attribute_group_lang agl ON (agl.id_attribute_group = ag.id_attribute_group)
-						INNER JOIN '._DB_PREFIX_.'attribute a ON (a.id_attribute_group = ag.id_attribute_group)
-						INNER JOIN '._DB_PREFIX_.'attribute_lang al ON (al.id_attribute = a.id_attribute)
-						LEFT JOIN '._DB_PREFIX_.'layered_indexable_attribute_group liag ON (liag.id_attribute_group = a.id_attribute_group)
-						LEFT JOIN '._DB_PREFIX_.'layered_indexable_attribute_group_lang_value liagl
-						ON (liagl.id_attribute_group = ag.id_attribute_group AND liagl.id_lang = '.(int) $filter['id_lang'].')
-						LEFT JOIN '._DB_PREFIX_.'layered_indexable_attribute_lang_value lial
-						ON (lial.id_attribute = a.id_attribute  AND lial.id_lang = '.(int) $filter['id_lang'].')
-						WHERE a.id_attribute_group = '.(int) $filter['id_value'].' AND agl.id_lang = al.id_lang AND agl.id_lang = '.(int) $filter['id_lang']
+						FROM ' . _DB_PREFIX_ . 'attribute_group ag
+						INNER JOIN ' . _DB_PREFIX_ . 'attribute_group_lang agl ON (agl.id_attribute_group = ag.id_attribute_group)
+						INNER JOIN ' . _DB_PREFIX_ . 'attribute a ON (a.id_attribute_group = ag.id_attribute_group)
+						INNER JOIN ' . _DB_PREFIX_ . 'attribute_lang al ON (al.id_attribute = a.id_attribute)
+						LEFT JOIN ' . _DB_PREFIX_ . 'layered_indexable_attribute_group liag ON (liag.id_attribute_group = a.id_attribute_group)
+						LEFT JOIN ' . _DB_PREFIX_ . 'layered_indexable_attribute_group_lang_value liagl
+						ON (liagl.id_attribute_group = ag.id_attribute_group AND liagl.id_lang = ' . (int)$filter['id_lang'] . ')
+						LEFT JOIN ' . _DB_PREFIX_ . 'layered_indexable_attribute_lang_value lial
+						ON (lial.id_attribute = a.id_attribute  AND lial.id_lang = ' . (int)$filter['id_lang'] . ')
+						WHERE a.id_attribute_group = ' . (int)$filter['id_value'] . ' AND agl.id_lang = al.id_lang AND agl.id_lang = ' . (int)$filter['id_lang']
                     );
 
                     foreach ($attributes as $attribute) {
                         if (!isset($attributeValuesByLang[$attribute['id_lang']])) {
                             $attributeValuesByLang[$attribute['id_lang']] = [];
                         }
-                        if (!isset($attributeValuesByLang[$attribute['id_lang']]['c'.$attribute['id_name']])) {
-                            $attributeValuesByLang[$attribute['id_lang']]['c'.$attribute['id_name']] = [];
+                        if (!isset($attributeValuesByLang[$attribute['id_lang']]['c' . $attribute['id_name']])) {
+                            $attributeValuesByLang[$attribute['id_lang']]['c' . $attribute['id_name']] = [];
                         }
-                        $attributeValuesByLang[$attribute['id_lang']]['c'.$attribute['id_name']][] = [
-                            'name'          => (!empty($attribute['name_url_name']) ? $attribute['name_url_name'] : $attribute['name']),
-                            'id_name'       => 'c'.$attribute['id_name'],
-                            'value'         => (!empty($attribute['value_url_name']) ? $attribute['value_url_name'] : $attribute['value']),
-                            'id_value'      => $attribute['id_name'].'_'.$attribute['id_value'],
-                            'id_id_value'   => $attribute['id_value'],
+                        $attributeValuesByLang[$attribute['id_lang']]['c' . $attribute['id_name']][] = [
+                            'name' => (!empty($attribute['name_url_name']) ? $attribute['name_url_name'] : $attribute['name']),
+                            'id_name' => 'c' . $attribute['id_name'],
+                            'value' => (!empty($attribute['value_url_name']) ? $attribute['value_url_name'] : $attribute['value']),
+                            'id_value' => $attribute['id_name'] . '_' . $attribute['id_value'],
+                            'id_id_value' => $attribute['id_value'],
                             'category_name' => $filter['link_rewrite'],
-                            'type'          => $filter['type'],
+                            'type' => $filter['type'],
                         ];
                     }
                     break;
@@ -1223,32 +1223,32 @@ class BlockLayered extends Module
                         '
 						SELECT fl.name name, fl.id_feature id_name, fvl.id_feature_value id_value, fvl.value value, fl.id_lang, fl.id_lang,
 						lifl.url_name name_url_name, lifvl.url_name value_url_name
-						FROM '._DB_PREFIX_.'feature_lang fl
-						LEFT JOIN '._DB_PREFIX_.'layered_indexable_feature lif ON (lif.id_feature = fl.id_feature)
-						INNER JOIN '._DB_PREFIX_.'feature_value fv ON (fv.id_feature = fl.id_feature)
-						INNER JOIN '._DB_PREFIX_.'feature_value_lang fvl ON (fvl.id_feature_value = fv.id_feature_value)
-						LEFT JOIN '._DB_PREFIX_.'layered_indexable_feature_lang_value lifl
-						ON (lifl.id_feature = fl.id_feature AND lifl.id_lang = '.(int) $filter['id_lang'].')
-						LEFT JOIN '._DB_PREFIX_.'layered_indexable_feature_value_lang_value lifvl
-						ON (lifvl.id_feature_value = fvl.id_feature_value AND lifvl.id_lang = '.(int) $filter['id_lang'].')
-						WHERE fl.id_feature = '.(int) $filter['id_value'].' AND fvl.id_lang = fl.id_lang AND fvl.id_lang = '.(int) $filter['id_lang']
+						FROM ' . _DB_PREFIX_ . 'feature_lang fl
+						LEFT JOIN ' . _DB_PREFIX_ . 'layered_indexable_feature lif ON (lif.id_feature = fl.id_feature)
+						INNER JOIN ' . _DB_PREFIX_ . 'feature_value fv ON (fv.id_feature = fl.id_feature)
+						INNER JOIN ' . _DB_PREFIX_ . 'feature_value_lang fvl ON (fvl.id_feature_value = fv.id_feature_value)
+						LEFT JOIN ' . _DB_PREFIX_ . 'layered_indexable_feature_lang_value lifl
+						ON (lifl.id_feature = fl.id_feature AND lifl.id_lang = ' . (int)$filter['id_lang'] . ')
+						LEFT JOIN ' . _DB_PREFIX_ . 'layered_indexable_feature_value_lang_value lifvl
+						ON (lifvl.id_feature_value = fvl.id_feature_value AND lifvl.id_lang = ' . (int)$filter['id_lang'] . ')
+						WHERE fl.id_feature = ' . (int)$filter['id_value'] . ' AND fvl.id_lang = fl.id_lang AND fvl.id_lang = ' . (int)$filter['id_lang']
                     );
 
                     foreach ($features as $feature) {
                         if (!isset($attributeValuesByLang[$feature['id_lang']])) {
                             $attributeValuesByLang[$feature['id_lang']] = [];
                         }
-                        if (!isset($attributeValuesByLang[$feature['id_lang']]['f'.$feature['id_name']])) {
-                            $attributeValuesByLang[$feature['id_lang']]['f'.$feature['id_name']] = [];
+                        if (!isset($attributeValuesByLang[$feature['id_lang']]['f' . $feature['id_name']])) {
+                            $attributeValuesByLang[$feature['id_lang']]['f' . $feature['id_name']] = [];
                         }
-                        $attributeValuesByLang[$feature['id_lang']]['f'.$feature['id_name']][] = [
-                            'name'          => (!empty($feature['name_url_name']) ? $feature['name_url_name'] : $feature['name']),
-                            'id_name'       => 'f'.$feature['id_name'],
-                            'value'         => (!empty($feature['value_url_name']) ? $feature['value_url_name'] : $feature['value']),
-                            'id_value'      => $feature['id_name'].'_'.$feature['id_value'],
-                            'id_id_value'   => $feature['id_value'],
+                        $attributeValuesByLang[$feature['id_lang']]['f' . $feature['id_name']][] = [
+                            'name' => (!empty($feature['name_url_name']) ? $feature['name_url_name'] : $feature['name']),
+                            'id_name' => 'f' . $feature['id_name'],
+                            'value' => (!empty($feature['value_url_name']) ? $feature['value_url_name'] : $feature['value']),
+                            'id_value' => $feature['id_name'] . '_' . $feature['id_value'],
+                            'id_id_value' => $feature['id_value'],
                             'category_name' => $filter['link_rewrite'],
-                            'type'          => $filter['type'],
+                            'type' => $filter['type'],
                         ];
                     }
                     break;
@@ -1257,9 +1257,9 @@ class BlockLayered extends Module
                     $categories = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS(
                         '
 						SELECT cl.name, cl.id_lang, c.id_category
-						FROM '._DB_PREFIX_.'category c
-						INNER JOIN '._DB_PREFIX_.'category_lang cl ON (c.id_category = cl.id_category)
-						WHERE cl.id_lang = '.(int) $filter['id_lang']
+						FROM ' . _DB_PREFIX_ . 'category c
+						INNER JOIN ' . _DB_PREFIX_ . 'category_lang cl ON (c.id_category = cl.id_category)
+						WHERE cl.id_lang = ' . (int)$filter['id_lang']
                     );
 
                     foreach ($categories as $category) {
@@ -1270,8 +1270,8 @@ class BlockLayered extends Module
                             $attributeValuesByLang[$category['id_lang']]['category'] = [];
                         }
                         $attributeValuesByLang[$category['id_lang']]['category'][] = [
-                            'name'          => $this->translateWord('Categories', $category['id_lang']),
-                            'id_name'       => null, 'value' => $category['name'], 'id_value' => $category['id_category'],
+                            'name' => $this->translateWord('Categories', $category['id_lang']),
+                            'id_name' => null, 'value' => $category['name'], 'id_value' => $category['id_category'],
                             'category_name' => $filter['link_rewrite'], 'type' => $filter['type'],
                         ];
                     }
@@ -1281,8 +1281,8 @@ class BlockLayered extends Module
                     $manufacturers = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS(
                         '
 						SELECT m.name AS name,l.id_lang AS id_lang,  id_manufacturer
-						FROM '._DB_PREFIX_.'manufacturer m , '._DB_PREFIX_.'lang l
-						WHERE l.id_lang = '.(int) $filter['id_lang']
+						FROM ' . _DB_PREFIX_ . 'manufacturer m , ' . _DB_PREFIX_ . 'lang l
+						WHERE l.id_lang = ' . (int)$filter['id_lang']
                     );
 
                     foreach ($manufacturers as $manufacturer) {
@@ -1293,8 +1293,8 @@ class BlockLayered extends Module
                             $attributeValuesByLang[$manufacturer['id_lang']]['manufacturer'] = [];
                         }
                         $attributeValuesByLang[$manufacturer['id_lang']]['manufacturer'][] = [
-                            'name'          => $this->translateWord('Manufacturer', $manufacturer['id_lang']),
-                            'id_name'       => null, 'value' => $manufacturer['name'], 'id_value' => $manufacturer['id_manufacturer'],
+                            'name' => $this->translateWord('Manufacturer', $manufacturer['id_lang']),
+                            'id_name' => null, 'value' => $manufacturer['name'], 'id_value' => $manufacturer['id_manufacturer'],
                             'category_name' => $filter['link_rewrite'], 'type' => $filter['type'],
                         ];
                     }
@@ -1302,13 +1302,13 @@ class BlockLayered extends Module
 
                 case 'quantity':
                     $avaibilityList = [
-                        $this->translateWord('Not available', (int) $filter['id_lang']),
-                        $this->translateWord('In stock', (int) $filter['id_lang']),
+                        $this->translateWord('Not available', (int)$filter['id_lang']),
+                        $this->translateWord('In stock', (int)$filter['id_lang']),
                     ];
                     foreach ($avaibilityList as $key => $quantity) {
                         $attributeValuesByLang[$filter['id_lang']]['quantity'][] = [
-                            'name'          => $this->translateWord('Availability', (int) $filter['id_lang']),
-                            'id_name'       => null, 'value' => $quantity, 'id_value' => $key, 'id_id_value' => 0,
+                            'name' => $this->translateWord('Availability', (int)$filter['id_lang']),
+                            'id_name' => null, 'value' => $quantity, 'id_value' => $key, 'id_id_value' => 0,
                             'category_name' => $filter['link_rewrite'], 'type' => $filter['type'],
                         ];
                     }
@@ -1316,19 +1316,20 @@ class BlockLayered extends Module
 
                 case 'condition':
                     $conditionList = [
-                        'new'         => $this->translateWord('New', (int) $filter['id_lang']),
-                        'used'        => $this->translateWord('Used', (int) $filter['id_lang']),
-                        'refurbished' => $this->translateWord('Refurbished', (int) $filter['id_lang']),
+                        'new' => $this->translateWord('New', (int)$filter['id_lang']),
+                        'used' => $this->translateWord('Used', (int)$filter['id_lang']),
+                        'refurbished' => $this->translateWord('Refurbished', (int)$filter['id_lang']),
                     ];
                     foreach ($conditionList as $key => $condition) {
                         $attributeValuesByLang[$filter['id_lang']]['condition'][] = [
-                            'name'          => $this->translateWord('Condition', (int) $filter['id_lang']),
-                            'id_name'       => null, 'value' => $condition, 'id_value' => $key,
+                            'name' => $this->translateWord('Condition', (int)$filter['id_lang']),
+                            'id_name' => null, 'value' => $condition, 'id_value' => $key,
                             'category_name' => $filter['link_rewrite'], 'type' => $filter['type'],
                         ];
                     }
                     break;
             }
+        }
 
         // Foreach langs
         foreach ($attributeValuesByLang as $idLang => $attributeValues) {
@@ -2282,7 +2283,7 @@ class BlockLayered extends Module
         );
 
         // Remove all empty selected filters
-        foreach ($selected_filters as $key => $value)
+        foreach ($selected_filters as $key => $value) {
             switch ($key) {
                 case 'price':
                 case 'weight':
@@ -2296,6 +2297,7 @@ class BlockLayered extends Module
                     }
                     break;
             }
+        }
 
         $filter_blocks = [];
         foreach ($filters as $filter) {
