@@ -2462,8 +2462,11 @@ class BlockLayered extends Module
                     break;
 
                 case 'category':
+                    $userGroups = [];
                     if (Group::isFeatureActive()) {
-                        $this->user_groups = ($this->context->customer->isLogged() ? $this->context->customer->getGroups() : [Configuration::get('PS_UNIDENTIFIED_GROUP')]);
+                        $userGroups = $this->context->customer->isLogged()
+                            ? $this->context->customer->getGroups()
+                            : [(int)Configuration::get('PS_UNIDENTIFIED_GROUP')];
                     }
 
                     $depth = Configuration::get('PS_LAYERED_FILTER_CATEGORY_DEPTH');
@@ -2483,8 +2486,8 @@ class BlockLayered extends Module
 					FROM '._DB_PREFIX_.'category c
 					LEFT JOIN '._DB_PREFIX_.'category_lang cl ON (cl.id_category = c.id_category AND cl.`id_shop` = '.(int) Context::getContext()->shop->id.' and cl.id_lang = '.(int) $id_lang.') ';
 
-                    if (Group::isFeatureActive()) {
-                        $sql_query['group'] .= 'RIGHT JOIN '._DB_PREFIX_.'category_group cg ON (cg.id_category = c.id_category AND cg.`id_group` IN ('.implode(', ', $this->user_groups).')) ';
+                    if ($userGroups) {
+                        $sql_query['group'] .= 'RIGHT JOIN '._DB_PREFIX_.'category_group cg ON (cg.id_category = c.id_category AND cg.`id_group` IN ('.implode(', ', $userGroups).')) ';
                     }
 
                     $sql_query['group'] .= 'WHERE c.nleft > '.(int) $parent->nleft.'

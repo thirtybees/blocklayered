@@ -28,5 +28,6 @@ include(dirname(__FILE__).'/../../config/config.inc.php');
 include(dirname(__FILE__).'/../../init.php');
 
 Context::getContext()->controller->php_self = 'category';
+/** @var BlockLayered $blockLayered */
 $blockLayered = Module::getInstanceByName('blocklayered');
 echo $blockLayered->ajaxCall();
