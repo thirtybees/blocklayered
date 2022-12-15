@@ -32,12 +32,26 @@ if (!defined('_TB_VERSION_')) {
  */
 class BlockLayered extends Module
 {
+    /**
+     * @var array|null
+     */
     private $products;
+
+    /**
+     * @var int
+     */
     private $nbr_products;
+
+    /**
+     * @var int
+     */
     private $page = 1;
 
     /**
      * BlockLayered constructor.
+     *
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
      */
     public function __construct()
     {
@@ -61,11 +75,25 @@ class BlockLayered extends Module
         }
     }
 
+    /**
+     * @param int $cursor
+     * @param bool $ajax
+     *
+     * @return int|string
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     public static function pricesIndexProcess($cursor = 0, $ajax = false)
     {
         return self::indexPrices($cursor, false, $ajax);
     }
 
+    /**
+     * @param array|null $filterValue
+     * @param bool $ignore_join
+     *
+     * @return array
+     */
     private static function getPriceFilterSubQuery($filterValue, $ignore_join = false)
     {
         $idCurrency = (int) Context::getContext()->currency->id;
@@ -81,6 +109,12 @@ class BlockLayered extends Module
         return [];
     }
 
+    /**
+     * @param array|null $filterValue
+     * @param bool $ignoreJoin
+     *
+     * @return array
+     */
     private static function getWeightFilterSubQuery($filterValue, $ignoreJoin = false)
     {
         if (isset($filterValue) && $filterValue) {
@@ -92,6 +126,12 @@ class BlockLayered extends Module
         return [];
     }
 
+    /**
+     * @param array|null $filterValue
+     * @param bool $ignoreJoin
+     *
+     * @return array
+     */
     private static function getId_featureFilterSubQuery($filterValue, $ignoreJoin = false)
     {
         if (empty($filterValue)) {
@@ -106,6 +146,12 @@ class BlockLayered extends Module
         return ['where' => $queryFilters];
     }
 
+    /**
+     * @param array|null $filterValue
+     * @param bool $ignoreJoin
+     *
+     * @return array
+     */
     private static function getId_attribute_groupFilterSubQuery($filterValue, $ignoreJoin = false)
     {
         if (empty($filterValue)) {
@@ -125,6 +171,12 @@ class BlockLayered extends Module
         return ['where' => $queryFilters];
     }
 
+    /**
+     * @param array|null $filterValue
+     * @param bool $ignoreJoin
+     *
+     * @return array
+     */
     private static function getCategoryFilterSubQuery($filterValue, $ignoreJoin = false)
     {
         if (empty($filterValue)) {
@@ -141,6 +193,12 @@ class BlockLayered extends Module
 
     //ATTRIBUTES GROUP
 
+    /**
+     * @param array|null $filterValue
+     * @param bool $ignoreJoin
+     *
+     * @return array
+     */
     private static function getQuantityFilterSubQuery($filterValue, $ignoreJoin = false)
     {
         if (empty($filterValue) || count($filterValue) == 2) {
@@ -153,6 +211,12 @@ class BlockLayered extends Module
         return ['where' => $queryFilters, 'join' => $queryFiltersJoin];
     }
 
+    /**
+     * @param array|null $filterValue
+     * @param bool $ignoreJoin
+     *
+     * @return array
+     */
     private static function getManufacturerFilterSubQuery($filterValue, $ignoreJoin = false)
     {
         if (empty($filterValue)) {
@@ -168,6 +232,12 @@ class BlockLayered extends Module
         }
     }
 
+    /**
+     * @param array|null $filterValue
+     * @param bool $ignoreJoin
+     *
+     * @return array
+     */
     private static function getConditionFilterSubQuery($filterValue, $ignoreJoin = false)
     {
         if (empty($filterValue) || count($filterValue) == 3) {
@@ -184,6 +254,11 @@ class BlockLayered extends Module
         return ['where' => $queryFilters];
     }
 
+    /**
+     * @return bool
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     public function install()
     {
         if (parent::install() && $this->registerHook('header') && $this->registerHook('leftColumn')
@@ -240,6 +315,11 @@ class BlockLayered extends Module
 
     //ATTRIBUTES
 
+    /**
+     * @return void
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     public function rebuildLayeredStructure()
     {
         @set_time_limit(0);
@@ -284,6 +364,11 @@ class BlockLayered extends Module
         );
     }
 
+    /**
+     * @return true|void
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     public function buildLayeredCategories()
     {
         // Get all filter template
@@ -373,6 +458,14 @@ class BlockLayered extends Module
         }
     }
 
+    /**
+     * @param int[] $productsIds
+     * @param int[] $categoriesIds
+     *
+     * @return void
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     public function rebuildLayeredCache($productsIds = [], $categoriesIds = [])
     {
         @set_time_limit(0);
@@ -541,6 +634,13 @@ class BlockLayered extends Module
         }
     }
 
+    /**
+     * @param string|DbQuery $sqlQuery
+     *
+     * @return false|PDOStatement
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     private static function query($sqlQuery)
     {
         return Db::getInstance(_PS_USE_SQL_SLAVE_)->query($sqlQuery);
@@ -548,6 +648,11 @@ class BlockLayered extends Module
 
     //FEATURES
 
+    /**
+     * @return void
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     private static function installPriceIndexTable()
     {
         Db::getInstance()->execute('DROP TABLE IF EXISTS `'._DB_PREFIX_.'layered_price_index`');
@@ -567,6 +672,11 @@ class BlockLayered extends Module
         );
     }
 
+    /**
+     * @return void
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     private function installFriendlyUrlTable()
     {
         Db::getInstance()->execute('DROP TABLE IF EXISTS `'._DB_PREFIX_.'layered_friendly_url`');
@@ -585,6 +695,11 @@ class BlockLayered extends Module
         Db::getInstance()->execute('CREATE INDEX `url_key` ON `'._DB_PREFIX_.'layered_friendly_url`(url_key(5))');
     }
 
+    /**
+     * @return void
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     private function installIndexableAttributeTable()
     {
         // Attributes Groups
@@ -674,6 +789,8 @@ class BlockLayered extends Module
     /**
      *
      * create table product attribute
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
      */
     public function installProductAttributeTable()
     {
@@ -693,6 +810,15 @@ class BlockLayered extends Module
 
     //FEATURES VALUE
 
+    /**
+     * @param int $cursor
+     * @param bool $ajax
+     * @param bool $smart
+     *
+     * @return int|string
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     public static function fullPricesIndexProcess($cursor = 0, $ajax = false, $smart = false)
     {
         if ($cursor == 0 && !$smart) {
@@ -702,6 +828,16 @@ class BlockLayered extends Module
         return self::indexPrices($cursor, true, $ajax, $smart);
     }
 
+    /**
+     * @param int|null $cursor
+     * @param bool $full
+     * @param bool $ajax
+     * @param bool $smart
+     *
+     * @return int|string
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     private static function indexPrices($cursor = null, $full = false, $ajax = false, $smart = false)
     {
         if ($full) {
@@ -773,6 +909,15 @@ class BlockLayered extends Module
         }
     }
 
+    /**
+     * @param int|null $cursor
+     * @param bool $full
+     * @param bool $smart
+     *
+     * @return int
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     private static function indexPricesUnbreakable($cursor, $full = false, $smart = false)
     {
         static $length = 100; // Nb of products to index
@@ -808,6 +953,14 @@ class BlockLayered extends Module
         return (int) ($cursor + $length);
     }
 
+    /**
+     * @param int $idProduct
+     * @param bool $smart
+     *
+     * @return void
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     public static function indexProductPrices($idProduct, $smart = true)
     {
         static $groups = null;
@@ -1000,6 +1153,14 @@ class BlockLayered extends Module
         }
     }
 
+    /**
+     * @param bool $ajax
+     * @param bool $truncate
+     *
+     * @return int|string|void
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     public function indexUrl($ajax = false, $truncate = true)
     {
         if ($truncate) {
@@ -1205,6 +1366,13 @@ class BlockLayered extends Module
         }
     }
 
+    /**
+     * @param string $string
+     * @param int $idLang
+     *
+     * @return array|string|string[]
+     * @throws PrestaShopException
+     */
     public function translateWord($string, $idLang)
     {
         static $_MODULES = [];
@@ -1252,6 +1420,10 @@ class BlockLayered extends Module
         return str_replace('"', '&quot;', $ret);
     }
 
+    /**
+     * @return false|string|null
+     * @throws PrestaShopException
+     */
     protected function getAnchor()
     {
         static $anchor = null;
@@ -1264,6 +1436,13 @@ class BlockLayered extends Module
         return $anchor;
     }
 
+    /**
+     * @param int|null $idProduct
+     *
+     * @return int
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     public function indexAttribute($idProduct = null)
     {
         if (is_null($idProduct)) {
@@ -1292,6 +1471,11 @@ class BlockLayered extends Module
         return 1;
     }
 
+    /**
+     * @return bool
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     public function uninstall()
     {
         /* Delete all configurations */
@@ -1323,6 +1507,13 @@ class BlockLayered extends Module
         return parent::uninstall();
     }
 
+    /**
+     * @param array $params
+     *
+     * @return void
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     public function hookAfterSaveAttributeGroup($params)
     {
         if (!$params['id_attribute_group'] || Tools::getValue('layered_indexable') === false) {
@@ -1362,6 +1553,13 @@ class BlockLayered extends Module
         }
     }
 
+    /**
+     * @param array $params
+     *
+     * @return void
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     public function hookAfterDeleteAttributeGroup($params)
     {
         if (!isset($params['id_attribute_group']) || !$params['id_attribute_group']) {
@@ -1378,6 +1576,12 @@ class BlockLayered extends Module
         );
     }
 
+    /**
+     * @param array $params
+     *
+     * @return void
+     * @throws PrestaShopException
+     */
     public function hookPostProcessAttributeGroup($params)
     {
         $errors = [];
@@ -1398,6 +1602,14 @@ class BlockLayered extends Module
         }
     }
 
+    /**
+     * @param array $params
+     *
+     * @return string
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     * @throws SmartyException
+     */
     public function hookAttributeGroupForm($params)
     {
         if (!isset($params['id_attribute_group']) || !$params['id_attribute_group']) {
@@ -1441,6 +1653,13 @@ class BlockLayered extends Module
      * Generate data product attribute
      */
 
+    /**
+     * @param array $params
+     *
+     * @return void
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     public function hookAfterSaveAttribute($params)
     {
         if (!isset($params['id_attribute']) || !$params['id_attribute']) {
@@ -1475,6 +1694,13 @@ class BlockLayered extends Module
      * Url indexation
      */
 
+    /**
+     * @param array $params
+     *
+     * @return void
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     public function hookAfterDeleteAttribute($params)
     {
         if (!isset($params['id_attribute']) || !$params['id_attribute']) {
@@ -1491,6 +1717,12 @@ class BlockLayered extends Module
      * $cursor $cursor in order to restart indexing from the last state
      */
 
+    /**
+     * @param array $params
+     *
+     * @return void
+     * @throws PrestaShopException
+     */
     public function hookPostProcessAttribute($params)
     {
         $errors = [];
@@ -1515,6 +1747,14 @@ class BlockLayered extends Module
      * $cursor $cursor in order to restart indexing from the last state
      */
 
+    /**
+     * @param array $params
+     *
+     * @return string
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     * @throws SmartyException
+     */
     public function hookAttributeForm($params)
     {
         if (!isset($params['id_attribute']) || !$params['id_attribute']) {
@@ -1545,6 +1785,13 @@ class BlockLayered extends Module
         return $this->display(__FILE__, 'attribute_form.tpl');
     }
 
+    /**
+     * @param array $params
+     *
+     * @return void
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     public function hookAfterSaveFeature($params)
     {
         if (!$params['id_feature'] || Tools::getValue('layered_indexable') === false) {
@@ -1589,6 +1836,13 @@ class BlockLayered extends Module
      * $cursor $cursor in order to restart indexing from the last state
      */
 
+    /**
+     * @param array $params
+     *
+     * @return void
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     public function hookAfterDeleteFeature($params)
     {
         if (!$params['id_feature']) {
@@ -1601,6 +1855,12 @@ class BlockLayered extends Module
         );
     }
 
+    /**
+     * @param array $params
+     *
+     * @return void
+     * @throws PrestaShopException
+     */
     public function hookPostProcessFeature($params)
     {
         $errors = [];
@@ -1621,6 +1881,14 @@ class BlockLayered extends Module
         }
     }
 
+    /**
+     * @param array $params
+     *
+     * @return string
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     * @throws SmartyException
+     */
     public function hookFeatureForm($params)
     {
         if (!isset($params['id_feature']) || !$params['id_feature']) {
@@ -1660,6 +1928,13 @@ class BlockLayered extends Module
         return $this->display(__FILE__, 'feature_form.tpl');
     }
 
+    /**
+     * @param array $params
+     *
+     * @return void
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     public function hookAfterSaveFeatureValue($params)
     {
         if (!$params['id_feature_value']) {
@@ -1691,6 +1966,13 @@ class BlockLayered extends Module
         }
     }
 
+    /**
+     * @param array $params
+     *
+     * @return void
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     public function hookAfterDeleteFeatureValue($params)
     {
         if (!$params['id_feature_value']) {
@@ -1703,6 +1985,12 @@ class BlockLayered extends Module
         );
     }
 
+    /**
+     * @param array $params
+     *
+     * @return void
+     * @throws PrestaShopException
+     */
     public function hookPostProcessFeatureValue($params)
     {
         $errors = [];
@@ -1723,6 +2011,14 @@ class BlockLayered extends Module
         }
     }
 
+    /**
+     * @param array $params
+     *
+     * @return string
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     * @throws SmartyException
+     */
     public function hookFeatureValueForm($params)
     {
         if (!isset($params['id_feature_value'])) {
@@ -1804,6 +2100,11 @@ class BlockLayered extends Module
         $this->context->smarty->assign('no_follow', $noFollow);
     }
 
+    /**
+     * @return array[]|void
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     private function getSelectedFilters()
     {
         $home_category = Configuration::get('PS_HOME_CATEGORY');
@@ -1917,6 +2218,13 @@ class BlockLayered extends Module
         return $selected_filters;
     }
 
+    /**
+     * @param array $selected_filters
+     *
+     * @return array|void|null
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     public function getFilterBlock($selected_filters = [])
     {
         global $cookie;
@@ -2759,6 +3067,12 @@ class BlockLayered extends Module
         return $cache;
     }
 
+    /**
+     * @param array|false|null $attributes
+     * @param int $id_value
+     *
+     * @return array
+     */
     public function cleanFilterByIdValue($attributes, $id_value)
     {
         $selected_filters = [];
@@ -2774,6 +3088,15 @@ class BlockLayered extends Module
         return $selected_filters;
     }
 
+    /**
+     * @param array|null $filter_value
+     * @param array $product_collection
+     *
+     * @return array
+     *
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     private static function filterProductsByPrice($filter_value, $product_collection)
     {
         static $ps_layered_filter_price_usetax = null;
@@ -2809,11 +3132,30 @@ class BlockLayered extends Module
         return $product_collection;
     }
 
+    /**
+     * @return bool|int
+     * @throws PrestaShopException
+     */
     protected function showPriceFilter()
     {
         return Group::getCurrent()->show_prices;
     }
 
+    /**
+     * @param array $selected_filters
+     * @param array $products
+     * @param int $nb_products
+     * @param int $p
+     * @param int $n
+     * @param int $pages_nb
+     * @param int $start
+     * @param int $stop
+     * @param int $range
+     *
+     * @return void
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     public function getProducts($selected_filters, &$products, &$nb_products, &$p, &$n, &$pages_nb, &$start, &$stop, &$range)
     {
         global $cookie;
@@ -2858,6 +3200,13 @@ class BlockLayered extends Module
         }
     }
 
+    /**
+     * @param array $selected_filters
+     *
+     * @return array|bool|PDOStatement|null
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     public function getProductByFilters($selected_filters = [])
     {
         global $cookie;
@@ -3137,6 +3486,13 @@ class BlockLayered extends Module
         return $this->products;
     }
 
+    /**
+     * @param array $params
+     *
+     * @return void
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     public function hookAfterSaveProduct($params)
     {
         if (!$params['id_product']) {
@@ -3147,16 +3503,37 @@ class BlockLayered extends Module
         $this->indexAttribute((int) $params['id_product']);
     }
 
+    /**
+     * @param array $params
+     *
+     * @return false|string
+     * @throws PrestaShopException
+     * @throws SmartyException
+     */
     public function hookRightColumn($params)
     {
         return $this->hookLeftColumn($params);
     }
 
+    /**
+     * @param array $params
+     *
+     * @return false|string
+     * @throws PrestaShopException
+     * @throws SmartyException
+     */
     public function hookLeftColumn($params)
     {
         return $this->generateFiltersBlock($this->getSelectedFilters());
     }
 
+    /**
+     * @param array $selected_filters
+     *
+     * @return false|string
+     * @throws PrestaShopException
+     * @throws SmartyException
+     */
     public function generateFiltersBlock($selected_filters)
     {
         if ($filter_block = $this->getFilterBlock($selected_filters)) {
@@ -3183,6 +3560,13 @@ class BlockLayered extends Module
         }
     }
 
+    /**
+     * @param array $params
+     *
+     * @return false|void
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     public function hookHeader($params)
     {
         if ((isset($this->context->controller->display_column_left) && !$this->context->controller->display_column_left)
@@ -3312,6 +3696,12 @@ class BlockLayered extends Module
         }
     }
 
+    /**
+     * @param array $params
+     *
+     * @return false|void
+     * @throws PrestaShopException
+     */
     public function hookFooter($params)
     {
         if ((isset($this->context->controller->display_column_left) && !$this->context->controller->display_column_left)
@@ -3332,11 +3722,25 @@ class BlockLayered extends Module
         }
     }
 
+    /**
+     * @param array $params
+     *
+     * @return void
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     public function hookCategoryAddition($params)
     {
         $this->rebuildLayeredCache([], [(int) $params['category']->id]);
     }
 
+    /**
+     * @param array $params
+     *
+     * @return void
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     public function hookCategoryUpdate($params)
     {
         /* The category status might (active, inactive) have changed, we have to update the layered cache table structure */
@@ -3345,6 +3749,13 @@ class BlockLayered extends Module
         }
     }
 
+    /**
+     * @param array $params
+     *
+     * @return void
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     public function hookCategoryDeletion($params)
     {
         $layered_filter_list = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS(
@@ -3373,6 +3784,12 @@ class BlockLayered extends Module
         $this->buildLayeredCategories();
     }
 
+    /**
+     * @return string
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     * @throws SmartyException
+     */
     public function getContent()
     {
         global $cookie;
@@ -3666,6 +4083,11 @@ class BlockLayered extends Module
         }
     }
 
+    /**
+     * @param int $count
+     *
+     * @return array
+     */
     public function displayLimitPostWarning($count)
     {
         $return = [];

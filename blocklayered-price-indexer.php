@@ -22,6 +22,7 @@
  * @license   Academic Free License (AFL 3.0)
  * PrestaShop is an internationally registered trademark of PrestaShop SA.
  */
+/** @noinspection PhpUnhandledExceptionInspection */
 
 include(dirname(__FILE__).'/../../config/config.inc.php');
 include(dirname(__FILE__).'/blocklayered.php');
