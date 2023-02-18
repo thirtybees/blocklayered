@@ -1605,6 +1605,8 @@ class BlockLayered extends Module
 
             if (Tools::getValue('url_name_'.$id_lang)) {
                 if (Tools::link_rewrite(Tools::getValue('url_name_'.$id_lang)) != strtolower(Tools::getValue('url_name_'.$id_lang))) {
+                    /** @noinspection PhpArrayWriteIsNotUsedInspection */
+                    /** @noinspection PhpArrayUsedOnlyForWriteInspection */
                     $params['errors'][] = Tools::displayError(
                         sprintf(
                             $this->l('"%s" is not a valid url'),
@@ -1744,6 +1746,8 @@ class BlockLayered extends Module
 
             if (Tools::getValue('url_name_'.$id_lang)) {
                 if (Tools::link_rewrite(Tools::getValue('url_name_'.$id_lang)) != strtolower(Tools::getValue('url_name_'.$id_lang))) {
+                    /** @noinspection PhpArrayWriteIsNotUsedInspection */
+                    /** @noinspection PhpArrayUsedOnlyForWriteInspection */
                     $params['errors'][] = Tools::displayError(
                         sprintf(
                             $this->l('"%s" is not a valid url'),
@@ -1880,6 +1884,8 @@ class BlockLayered extends Module
 
             if (Tools::getValue('url_name_'.$id_lang)) {
                 if (Tools::link_rewrite(Tools::getValue('url_name_'.$id_lang)) != strtolower(Tools::getValue('url_name_'.$id_lang))) {
+                    /** @noinspection PhpArrayWriteIsNotUsedInspection */
+                    /** @noinspection PhpArrayUsedOnlyForWriteInspection */
                     $params['errors'][] = Tools::displayError(
                         sprintf(
                             $this->l('"%s" is not a valid url'),
@@ -2008,6 +2014,8 @@ class BlockLayered extends Module
 
             if (Tools::getValue('url_name_'.$id_lang)) {
                 if (Tools::link_rewrite(Tools::getValue('url_name_'.$id_lang)) != strtolower(Tools::getValue('url_name_'.$id_lang))) {
+                    /** @noinspection PhpArrayWriteIsNotUsedInspection */
+                    /** @noinspection PhpArrayUsedOnlyForWriteInspection */
                     $params['errors'][] = Tools::displayError(
                         sprintf(
                             $this->l('"%s" is not a valid url'),
@@ -2087,6 +2095,7 @@ class BlockLayered extends Module
         }
 
         // Inform the hook was executed
+        /** @noinspection PhpArrayWriteIsNotUsedInspection */
         $params['hookExecuted'] = true;
         // List of product to overrride categoryController
         $params['catProducts'] = [];
