@@ -3038,12 +3038,12 @@ class BlockLayered extends Module
 
         $n_filters = 0;
 
-        if (isset($selected_filters['price'])) {
+        if (isset($selected_filters['price']) && isset($price_array)) {
             if ($price_array['min'] == $selected_filters['price'][0] && $price_array['max'] == $selected_filters['price'][1]) {
                 unset($selected_filters['price']);
             }
         }
-        if (isset($selected_filters['weight'])) {
+        if (isset($selected_filters['weight']) && isset($weight_array)) {
             if ($weight_array['min'] == $selected_filters['weight'][0] && $weight_array['max'] == $selected_filters['weight'][1]) {
                 unset($selected_filters['weight']);
             }
@@ -3410,6 +3410,9 @@ class BlockLayered extends Module
 				WHERE 1 '.$query_filters_where.' GROUP BY cp.id_product'
                 );
             } else {
+                if (! isset($categories)) {
+                    $categories = [];
+                }
                 $all_products_out = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS(
                     '
 				SELECT p.`id_product` id_product
