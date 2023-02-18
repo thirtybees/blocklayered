@@ -1418,14 +1418,14 @@ class BlockLayered extends Module
         if (isset($_MODULES[$idLang][$currentKey])) {
             $ret = stripslashes($_MODULES[$idLang][$currentKey]);
         } else {
-            if (isset($_MODULES[$idLang][Tools::strtolower($currentKey)])) {
-                $ret = stripslashes($_MODULES[$idLang][Tools::strtolower($currentKey)]);
+            if (isset($_MODULES[$idLang][strtolower($currentKey)])) {
+                $ret = stripslashes($_MODULES[$idLang][strtolower($currentKey)]);
             } else {
                 if (isset($_MODULES[$idLang][$defaultKey])) {
                     $ret = stripslashes($_MODULES[$idLang][$defaultKey]);
                 } else {
-                    if (isset($_MODULES[$idLang][Tools::strtolower($defaultKey)])) {
-                        $ret = stripslashes($_MODULES[$idLang][Tools::strtolower($defaultKey)]);
+                    if (isset($_MODULES[$idLang][strtolower($defaultKey)])) {
+                        $ret = stripslashes($_MODULES[$idLang][strtolower($defaultKey)]);
                     } else {
                         $ret = stripslashes($string);
                     }
@@ -4171,7 +4171,7 @@ class BlockLayered extends Module
 
         $meta_description = $category_metas['meta_description'];
 
-        $keywords = Tools::substr(Tools::strtolower($keywords), 0, 1000);
+        $keywords = mb_substr(mb_strtolower($keywords), 0, 1000);
         if (!empty($keywords)) {
             $meta_keywords = rtrim($category_title.', '.$keywords.', '.$category_metas['meta_keywords'], ', ');
         }
