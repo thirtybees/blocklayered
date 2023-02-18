@@ -2171,9 +2171,6 @@ class BlockLayered extends Module
                                             $selected_filters[$key_params] = [];
                                         }
                                         foreach ($params as $key_param => $param) {
-                                            if (!isset($selected_filters[$key_params][$key_param])) {
-                                                $selected_filters[$key_params][$key_param] = [];
-                                            }
                                             $selected_filters[$key_params][$key_param] = Tools::purifyHTML($param);
                                         }
                                     }
