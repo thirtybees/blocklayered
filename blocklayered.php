@@ -2812,7 +2812,7 @@ class BlockLayered extends Module
                         //Natural sort
                         foreach ($feature_array as $key => $value) {
                             $temp = [];
-                            foreach ($feature_array[$key]['values'] as $keyint => $valueint) {
+                            foreach ($value['values'] as $keyint => $valueint) {
                                 $temp[$keyint] = $valueint['name'];
                             }
 
@@ -2820,7 +2820,7 @@ class BlockLayered extends Module
                             $temp2 = [];
 
                             foreach ($temp as $keytemp => $valuetemp) {
-                                $temp2[$keytemp] = $feature_array[$key]['values'][$keytemp];
+                                $temp2[$keytemp] = $value['values'][$keytemp];
                             }
 
                             $feature_array[$key]['values'] = $temp2;
