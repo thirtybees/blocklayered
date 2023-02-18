@@ -403,13 +403,7 @@ class BlockLayered extends Module
         $values = false;
 
         foreach ($res as $filterTemplate) {
-            $data = json_decode($filterTemplate['filters'], true);
-            // Retrocompatibility for module versions <= 3.0.3, which used to
-            // store data not JSON encoded, but serialized. Can get removed a
-            // couple of releases later.
-            if ( ! $data) {
-                $data = Tools::unSerialize($filterTemplate['filters']);
-            }
+            $data = static::decode($filterTemplate['filters']);
 
             foreach ($data['shop_list'] as $idShop) {
                 if (!isset($categories[$idShop])) {
@@ -2157,14 +2151,7 @@ class BlockLayered extends Module
                             foreach ($url_parameters as $url_parameter) {
                                 $result = Db::getInstance()->getValue('SELECT data FROM `'._DB_PREFIX_.'layered_friendly_url` WHERE `url_key` = \''.md5('/'.$attribute_name.$this->getAnchor().$url_parameter).'\'');
                                 if ($result) {
-                                    $data = json_decode($result, true);
-                                    // Retrocompatibility for module versions
-                                    // <= 3.0.3, which used to store data not
-                                    // JSON encoded, but serialized. Can get
-                                    // removed a couple of releases later.
-                                    if ( ! $data) {
-                                        $data = Tools::unSerialize($result);
-                                    }
+                                    $data = static::decode($result);
 
                                     foreach ($data as $key_params => $params) {
                                         if (!isset($selected_filters[$key_params])) {
@@ -3777,13 +3764,7 @@ class BlockLayered extends Module
         );
 
         foreach ($layered_filter_list as $layered_filter) {
-            $data = json_decode($layered_filter['filters'], true);
-            // Retrocompatibility for module versions <= 3.0.3, which used to
-            // store data not JSON encoded, but serialized. Can get removed a
-            // couple of releases later.
-            if ( ! $data) {
-                $data = Tools::unSerialize($layered_filter['filters']);
-            }
+            $data = static::decode($layered_filter['filters']);
 
             if (in_array((int) $params['category']->id, $data['categories'])) {
                 unset($data['categories'][array_search((int) $params['category']->id, $data['categories'])]);
@@ -4031,14 +4012,7 @@ class BlockLayered extends Module
 				WHERE id_layered_filter = '.(int) Tools::getValue('id_layered_filter')
                 );
 
-                $filters = json_decode($template['filters'], true);
-                // Retrocompatibility for module versions <= 3.0.3, which used to
-                // store data not JSON encoded, but serialized. Can get removed a
-                // couple of releases later.
-                if ( ! $filters) {
-                        $filters = Tools::unSerialize($template['filters']);
-                }
-
+                $filters = static::decode($template['filters']);
                 $tree_categories_helper->setSelectedCategories($filters['categories']);
                 $this->context->smarty->assign('categories_tree', $tree_categories_helper->render());
 
@@ -4231,5 +4205,27 @@ class BlockLayered extends Module
         /* We are sending an array in jSon to the .js controller, it will update both the filters and the products zones */
 
         return json_encode($vars);
+    }
+
+    /**
+     * Decode json_encoded value.
+     *
+     * @param string $value
+     * @return array
+     */
+    protected static function decode($value)
+    {
+        $value = (string)$value;
+        $data = json_decode($value, true);
+        // Retrocompatibility for module versions <= 3.0.3, which used to
+        // store data not JSON encoded, but serialized. Can get removed a
+        // couple of releases later.
+        if ($data === false) {
+            $data = unserialize($value);
+            if (is_array($data)) {
+                trigger_error("blocklayered module configuration is serialized using old mechanism. Please go to module configuration page and re-save it", E_USER_WARNING);
+            }
+        }
+        return is_array($data) ? $data : [];
     }
 }
