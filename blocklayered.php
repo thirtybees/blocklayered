@@ -3298,7 +3298,7 @@ class BlockLayered extends Module
                     break;
 
                 case 'manufacturer':
-                    $query_filters_where .= ' AND p.id_manufacturer IN ('.implode($selected_filters['manufacturer'], ',').')';
+                    $query_filters_where .= ' AND p.id_manufacturer IN ('.implode(',', $selected_filters['manufacturer']).')';
                     break;
 
                 case 'condition':
