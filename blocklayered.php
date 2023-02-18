@@ -236,7 +236,7 @@ class BlockLayered extends Module
         if (empty($filterValue)) {
             $queryFilters = '';
         } else {
-            array_walk($filterValue, create_function('&$id_manufacturer', '$id_manufacturer = (int)$id_manufacturer;'));
+            $filterValue = array_map('intval', $filterValue);
             $queryFilters = ' AND p.id_manufacturer IN ('.implode(',', $filterValue).')';
         }
         if ($ignoreJoin) {
