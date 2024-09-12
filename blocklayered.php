@@ -1380,54 +1380,52 @@ class BlockLayered extends Module
      * @param string $string
      * @param int $idLang
      *
-     * @return array|string|string[]
+     * @return string
      * @throws PrestaShopException
      */
     public function translateWord($string, $idLang)
     {
-        static $_MODULES = [];
-        global $_MODULE;
+        static $translations = [];
 
-        $file = _PS_MODULE_DIR_.$this->name.'/translations/'.Language::getIsoById($idLang).'.php';
-
-        if (!array_key_exists($idLang, $_MODULES)) {
-            if (file_exists($file1 = _PS_MODULE_DIR_.$this->name.'/translations/'.Language::getIsoById($idLang).'.php')) {
-                include($file1);
-                $_MODULES[$idLang] = $_MODULE;
-            } elseif (file_exists($file2 = _PS_MODULE_DIR_.$this->name.'/'.Language::getIsoById($idLang).'.php')) {
-                include($file2);
-                $_MODULES[$idLang] = $_MODULE;
-            } else {
-                return $string;
-            }
-        }
-
-        $string = str_replace('\'', '\\\'', $string);
-
-        // set array key to lowercase for 1.3 compatibility
-        $_MODULES[$idLang] = array_change_key_case($_MODULES[$idLang]);
-        $currentKey = '<{'.strtolower($this->name).'}'.strtolower(_THEME_NAME_).'>'.strtolower($this->name).'_'.md5($string);
-        $defaultKey = '<{'.strtolower($this->name).'}prestashop>'.strtolower($this->name).'_'.md5($string);
-
-        if (isset($_MODULES[$idLang][$currentKey])) {
-            $ret = stripslashes($_MODULES[$idLang][$currentKey]);
-        } else {
-            if (isset($_MODULES[$idLang][strtolower($currentKey)])) {
-                $ret = stripslashes($_MODULES[$idLang][strtolower($currentKey)]);
-            } else {
-                if (isset($_MODULES[$idLang][$defaultKey])) {
-                    $ret = stripslashes($_MODULES[$idLang][$defaultKey]);
-                } else {
-                    if (isset($_MODULES[$idLang][strtolower($defaultKey)])) {
-                        $ret = stripslashes($_MODULES[$idLang][strtolower($defaultKey)]);
-                    } else {
-                        $ret = stripslashes($string);
-                    }
+        if (!array_key_exists($idLang, $translations)) {
+            $translation = [];
+            $isoCode = Language::getIsoById($idLang);
+            if ($isoCode) {
+                $filesByPriority = [
+                    // Translations in theme
+                    _PS_THEME_DIR_ . 'modules/' . $this->name . '/translations/' . $isoCode . '.php',
+                    _PS_THEME_DIR_ . 'modules/' . $this->name . '/' . $isoCode . '.php',
+                    _PS_MODULE_DIR_ . $this->name . '/translations/' . $isoCode . '.php',
+                    _PS_MODULE_DIR_ . $this->name . '/' . $isoCode . '.php',
+                ];
+                foreach ($filesByPriority as $candidate) {
+                    $translation = $translation + static::loadTranslationFile($candidate);
                 }
             }
+            $translations[$idLang] = $translation;
+        } else {
+            $translation = $translations[$idLang];
         }
 
-        return str_replace('"', '&quot;', $ret);
+        $string = preg_replace("/\\\*'/", "\'", $string);
+        $key = md5($string);
+
+        $currentKey = strtolower('<{'.$this->name.'}'._THEME_NAME_.'>'.$this->name).'_'.$key;
+        $defaultKey = strtolower('<{'.$this->name.'}thirtybees>'.$this->name).'_'.$key;
+        $prestaShopKey = strtolower('<{'.$this->name.'}prestashop>'.$this->name).'_'.$key;
+
+
+        if (!empty($translation[$currentKey])) {
+            $ret = $translation[$currentKey];
+        } elseif (!empty($translation[$defaultKey])) {
+            $ret = $translation[$defaultKey];
+        } elseif (!empty($translations[$prestaShopKey])) {
+            $ret = $translations[$prestaShopKey];
+        } else {
+            $ret = $string;
+        }
+
+        return htmlspecialchars(stripslashes($ret), ENT_COMPAT, 'UTF-8');
     }
 
     /**
@@ -4230,5 +4228,23 @@ class BlockLayered extends Module
             }
         }
         return is_array($data) ? $data : [];
+    }
+
+    /**
+     * @param string $filePath
+     *
+     * @return array
+     */
+    protected static function loadTranslationFile(string $filePath): array
+    {
+        global $_MODULE;
+        if (file_exists($filePath)) {
+            $_MODULE = [];
+            include($filePath);
+            if (is_array($_MODULE)) {
+                return $_MODULE;
+            }
+        }
+        return [];
     }
 }
