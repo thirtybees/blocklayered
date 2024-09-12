@@ -1419,8 +1419,8 @@ class BlockLayered extends Module
             $ret = $translation[$currentKey];
         } elseif (!empty($translation[$defaultKey])) {
             $ret = $translation[$defaultKey];
-        } elseif (!empty($translations[$prestaShopKey])) {
-            $ret = $translations[$prestaShopKey];
+        } elseif (!empty($translation[$prestaShopKey])) {
+            $ret = $translation[$prestaShopKey];
         } else {
             $ret = $string;
         }
