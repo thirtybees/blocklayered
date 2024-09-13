@@ -2735,13 +2735,18 @@ class BlockLayered extends Module
                     $attributes_array = [];
                     if (isset($products) && $products) {
                         foreach ($products as $attributes) {
-                            if (!isset($attributes_array[$attributes['id_attribute_group']])) {
-                                $attributes_array[$attributes['id_attribute_group']] = [
+
+                            $attributeGroupId = (int)$attributes['id_attribute_group'];
+                            $attributeId = (int)$attributes['id_attribute'];
+                            $isColorGroup = (bool)$attributes['is_color_group'];
+
+                            if (!isset($attributes_array[$attributeGroupId])) {
+                                $attributes_array[$attributeGroupId] = [
                                     'type_lite'         => 'id_attribute_group',
                                     'type'              => 'id_attribute_group',
-                                    'id_key'            => (int) $attributes['id_attribute_group'],
+                                    'id_key'            => (int)$attributeGroupId,
                                     'name'              => $attributes['attribute_group_name'],
-                                    'is_color_group'    => (bool) $attributes['is_color_group'],
+                                    'is_color_group'    => $isColorGroup,
                                     'values'            => [],
                                     'url_name'          => $attributes['name_url_name'],
                                     'meta_title'        => $attributes['name_meta_title'],
@@ -2750,9 +2755,12 @@ class BlockLayered extends Module
                                 ];
                             }
 
-                            if (!isset($attributes_array[$attributes['id_attribute_group']]['values'][$attributes['id_attribute']])) {
-                                $attributes_array[$attributes['id_attribute_group']]['values'][$attributes['id_attribute']] = [
-                                    'color'      => $attributes['color'],
+                            if (!isset($attributes_array[$attributeGroupId]['values'][$attributeId])) {
+                                $color = $isColorGroup ? $attributes['color'] : null;
+                                $texture = $isColorGroup ? $this->getAttributeTextureUri($attributeId) : null;
+                                $attributes_array[$attributeGroupId]['values'][$attributeId] = [
+                                    'color'      => $color,
+                                    'texture'    => $texture,
                                     'name'       => $attributes['attribute_name'],
                                     'nbr'        => (int) $attributes['nbr'],
                                     'url_name'   => $attributes['value_url_name'],
@@ -2760,8 +2768,8 @@ class BlockLayered extends Module
                                 ];
                             }
 
-                            if (isset($selected_filters['id_attribute_group'][$attributes['id_attribute']])) {
-                                $attributes_array[$attributes['id_attribute_group']]['values'][$attributes['id_attribute']]['checked'] = true;
+                            if (isset($selected_filters['id_attribute_group'][$attributeId])) {
+                                $attributes_array[$attributeGroupId]['values'][$attributeId]['checked'] = true;
                             }
                         }
 
@@ -4246,5 +4254,26 @@ class BlockLayered extends Module
             }
         }
         return [];
+    }
+
+    /**
+     * @param int $attributeId
+     *
+     * @return string|null
+     *
+     * @throws PrestaShopException
+     */
+    protected function getAttributeTextureUri($attributeId)
+    {
+        if (method_exists('ProductAttribute', 'getTextureFilePath')) {
+            $textureFilePath = ProductAttribute::getTextureFilePath($attributeId);
+        } else {
+            $textureFilePath = _PS_COL_IMG_DIR_ . (int)$attributeId . '.jpg';
+        }
+
+        if ($textureFilePath && file_exists($textureFilePath)) {
+            return str_replace(_PS_COL_IMG_DIR_, _THEME_COL_DIR_, $textureFilePath);
+        }
+        return null;
     }
 }
