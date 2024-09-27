@@ -4022,7 +4022,8 @@ class BlockLayered extends Module
                 );
 
                 $filters = static::decode($template['filters']);
-                $tree_categories_helper->setSelectedCategories($filters['categories']);
+                $categories = is_array($filters['categories']) ? $filters['categories'] : [];
+                $tree_categories_helper->setSelectedCategories($categories);
                 $this->context->smarty->assign('categories_tree', $tree_categories_helper->render());
 
                 unset($filters['categories']);
@@ -4229,7 +4230,7 @@ class BlockLayered extends Module
         // Retrocompatibility for module versions <= 3.0.3, which used to
         // store data not JSON encoded, but serialized. Can get removed a
         // couple of releases later.
-        if ($data === false) {
+        if (is_null($data) || $data === false) {
             $data = unserialize($value);
             if (is_array($data)) {
                 trigger_error("blocklayered module configuration is serialized using old mechanism. Please go to module configuration page and re-save it", E_USER_WARNING);
