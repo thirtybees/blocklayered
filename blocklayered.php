@@ -4133,7 +4133,7 @@ class BlockLayered extends Module
         $category = new Category(Tools::getValue('id_category_layered', Configuration::get('PS_HOME_CATEGORY')), (int) $cookie->id_lang);
 
         // Generate meta title and meta description
-        $category_title = (empty($category->meta_title) ? $category->name : $category->meta_title);
+        $category_title = $category->name;
         $category_metas = Meta::getMetaTags((int) $cookie->id_lang, 'category');
         $title = '';
         $keywords = '';
